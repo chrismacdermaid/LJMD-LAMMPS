@@ -1,12 +1,14 @@
-/************************************************************
+/* ***********************************************************
  * JLMD++ A C++ version of LJMD motived by LAMMPS.
- *
+ 
  * http://sites.google.com/site/akohlmey/software/ljmd
- * and http://lammps.sandia.gov/
+  and http://lammps.sandia.gov/
  * 
  * Some routines are taken in whole or in part from LJMD
  * or LAMMPS. This software is distributed under the 
  * GNU General Public License.
+ *
+ * Written by Chris MacDermaid; chris.macdermaid@gmail.com
  *
  * Basic goal: Write LJMD in CPP, but designed like LAMMPS
  * to illustrate modularity.
@@ -14,7 +16,7 @@
  * This code is intended for educational use only
  * and should not be used in a production type environment.
  * Results should not be trusted. You've been warned.  
- ***********************************************************/
+ ********************************************************** */
 
 #ifndef LJMD_LJMD_H
 #define LJMD_LJMD_H
@@ -43,6 +45,7 @@ namespace LJMD_NS {
       class Output *output;     // output dumps                 output.cpp/output.h
       class Timer *timer;       // CPU timing info              timer.cpp/timer.h
       class Modify *modify;     // Fixes and computes           fix.cpp/fix.h
+      class Input *input        // Input file parsing           input.cpp/input.h
 
       MPI_Comm world;           // MPI Comm
       FILE *infile;             // The Infile
