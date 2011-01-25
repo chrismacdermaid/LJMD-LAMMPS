@@ -21,8 +21,11 @@
 #include "mpi.h"
 #include "string.h"
 #include "ljmd.h"
+#include "memory.h"
 #include "error.h"
 #include "universe.h"
+
+#include "stdlib.h"
 
 /*
 #include "input.h"
@@ -45,10 +48,23 @@ using namespace LJMD_NS;
    switches.
   ********************************************************** */
 
-LJMD::LJMD(int narg, **arg, MPI_Comm communicator)
+LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
 {
+  // Fundamental Classes
   memory = new Memory(this);
   error = new Error(this);
   universe = new Universe(this, communicator);
+
+  world = universe->uworld;
+
+  if (universe->me == 0)
+    fprintf(universe->uscreen, "Running on %d procs\n",universe->nprocs);
+
 }
-  
+
+LJMD::~LJMD()
+{
+  delete universe;
+  delete error;
+  delete memory;
+}

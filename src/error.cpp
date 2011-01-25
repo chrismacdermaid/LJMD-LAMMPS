@@ -70,3 +70,43 @@ void Error::universe_one(const char *str)
     fprintf(universe->uscreen,"ERROR on proc %d: %s\n",universe->me,str);
     MPI_Abort(universe->uworld,1);
 }
+
+/* ----------------------------------------------------------------------
+   called by all procs in one world
+   close all output, screen, and log files in world
+------------------------------------------------------------------------- */
+
+void Error::all(const char *str)
+{
+  MPI_Barrier(world);
+
+  int me;
+  MPI_Comm_rank(world,&me);
+
+  MPI_Finalize();
+  exit(1);
+}
+
+/* ----------------------------------------------------------------------
+   called by one proc in world
+   write to world screen only if non-NULL on this proc
+   always write to universe screen 
+------------------------------------------------------------------------- */
+
+void Error::one(const char *str)
+{
+  int me;
+  MPI_Comm_rank(world,&me);
+  MPI_Abort(world,1);
+}
+
+/* ----------------------------------------------------------------------
+   called by one proc in world
+   only write to screen if non-NULL on this proc since could be file 
+------------------------------------------------------------------------- */
+
+void Error::warning(const char *str, int logflag)
+{
+  //  if (screen) fprintf(screen,"WARNING: %s\n",str);
+  //  if (logflag && logfile) fprintf(logfile,"WARNING: %s\n",str);
+}

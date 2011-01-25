@@ -1,8 +1,8 @@
 /* ***********************************************************
  * JLMD++ A C++ version of LJMD motived by LAMMPS.
- 
+ *
  * http://sites.google.com/site/akohlmey/software/ljmd
-  and http://lammps.sandia.gov/
+ * and http://lammps.sandia.gov/
  * 
  * Some routines are taken in whole or in part from LJMD
  * or LAMMPS. This software is distributed under the 

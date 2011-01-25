@@ -24,13 +24,20 @@
 
 using namespace LJMD_NS;
 
-int main(int, argc, char **argv)
+int main(int argc, char **argv)
 {
-  MPI_Init(&argc, char &argv);
+  // Initilize MPI
+  MPI_Init(&argc, &argv);
 
+  // Create a LJMD instance
   LJMD *ljmd = new LJMD(argc, argv, MPI_COMM_WORLD);
-  delete ljmd->input->file();
+  
+  // begin reading and interpreting input file
+  //ljmd->input->file();
+
+  // Delete the instance
   delete ljmd;
 
+  // Cleanup MPI
   MPI_Finalize();
 }

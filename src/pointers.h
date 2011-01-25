@@ -33,8 +33,8 @@
 ------------------------------------------------------------------------- */
 
 // Pointers class contains ptrs to master copy of
-// fundamental LJMD class ptrs stored in lammps.h
-// every LAMMPS class inherits from Pointers to access lammps.h ptrs
+// fundamental LJMD class ptrs stored in ljmd.h
+// every LJMD class inherits from Pointers to access ljmd.h ptrs
 // these variables are auto-initialized by Pointer class constructor
 // *& variables are really pointers to the pointers in lammps.h
 // & enables them to be accessed directly in any class, e.g. error->all()
@@ -47,53 +47,24 @@
 
 namespace LJMD_NS {
 
-class Pointers {
- public:
-  Pointers(LJMD *ptr) : 
-    ljmd(ptr),
-    memory(ptr->memory),
-    error(ptr->error),
-    universe(ptr->universe),
-    input(ptr->input),
-    atom(ptr->atom),
-    update(ptr->update),
-    neighbor(ptr->neighbor),
-    comm(ptr->comm),
-    domain(ptr->domain),
-    force(ptr->force),
-    modify(ptr->modify),
-    group(ptr->group),
-    output(ptr->output),
-    timer(ptr->timer),
-    world(ptr->world),
-    infile(ptr->infile),
-    screen(ptr->screen),
-    logfile(ptr->logfile) {}
-  virtual ~Pointers() {}
-
- protected:
-  LJMD *ljmd;
-  Memory *&memory;
-  Error *&error;
-  Universe *&universe;
-  Input *&input;
-
-  Atom *&atom;
-  Update *&update;
-  Neighbor *&neighbor;
-  Comm *&comm;
-  Domain *&domain;
-  Force *&force;
-  Modify *&modify;
-  Group *&group;
-  Output *&output;
-  Timer *&timer;
-
-  MPI_Comm &world;
-  FILE *&infile;
-  FILE *&screen;
-  FILE *&logfile;
-};
+	class Pointers{
+	 public:
+	  Pointers(LJMD *ptr) : 
+	    ljmd(ptr),
+	    memory(ptr->memory),
+	    error(ptr->error),
+	    universe(ptr->universe),
+	    world(ptr->world) {}
+	  virtual ~Pointers() {}
+	 
+	 protected:
+	  LJMD *ljmd;
+	  Memory *&memory;
+	  Error *&error;
+	  Universe *&universe;
+ 
+	  MPI_Comm &world;
+	};
 
 }
 

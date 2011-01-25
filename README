@@ -12,4 +12,6 @@ The goals of this project are the following:
 3. Help people unfamiliar with MD get acquainted in a non-intimidating way.
 4. Compare timings between codes with additional/variable levels of overhead/abstraction.
 5. Include many comments so as to be readable and understandable to novices.
-6. Retain the basic idea in LJMD, but use the CPP paradigms found in the LAMMPS code. 
+6. Retain the basic idea in LJMD, but use the CPP paradigms found in the LAMMPS code.
+
+mpicxx -arch i386  ljmd.cpp error.cpp memory.cpp universe.cpp main.cpp -o ljmd

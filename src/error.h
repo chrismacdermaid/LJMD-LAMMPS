@@ -24,6 +24,10 @@ namespace LJMD_NS {
 	 
 	  void universe_all(const char *);
 	  void universe_one(const char *);
+
+	  void all(const char *);
+	  void one(const char *);
+	  void warning(const char *, int = 1);
 	 
 	};
 
