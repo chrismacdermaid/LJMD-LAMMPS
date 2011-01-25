@@ -1,0 +1,15 @@
+JLMD ++
+
+A port of Axel Kohlmeyer's LJMD code written in CPP with the
+spirit of the LAMMPS coding model.
+
+Original LJMD code: http://sites.google.com/site/akohlmey/software/ljmd
+
+The goals of this project are the following:
+
+1. Use a simple problem to illustrate parallelism and appropirate implementation in cpp.
+2. Help people unfamiliar with C++ get acquainted in a non-intimidating way.
+3. Help people unfamiliar with MD get acquainted in a non-intimidating way.
+4. Compare timings between codes with additional/variable levels of overhead/abstraction.
+5. Include many comments so as to be readable and understandable to novices.
+6. Retain the basic idea in LJMD, but use the CPP paradigms found in the LAMMPS code. 
