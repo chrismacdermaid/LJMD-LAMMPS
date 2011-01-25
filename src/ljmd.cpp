@@ -23,6 +23,8 @@
 #include "ljmd.h"
 #include "error.h"
 #include "universe.h"
+
+/*
 #include "input.h"
 #include "atom.h"
 #include "update.h"
@@ -33,6 +35,7 @@
 #include "modify.h"
 #include "output.h"
 #include "timer.h"
+*/
 
 using namespace LJMD_NS;
 

@@ -59,3 +59,5 @@ namespace LJMD_NS {
       void destroy();
   };
 }
+
+#endif
