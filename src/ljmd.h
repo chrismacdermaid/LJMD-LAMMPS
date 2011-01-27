@@ -37,6 +37,8 @@ namespace LJMD_NS {
 
       // Top level classes
       class Atom *atom;        // Atom based quantities         atom.cpp/atom.h
+      class Update *update;    // Integrator based quantities   update.cpp/update.h
+      class Force *force;      // Forces                        force.cpp/force.h
 
       MPI_Comm world;           // MPI Comm
 

@@ -11,48 +11,55 @@
  * Written by Chris MacDermaid; chris.macdermaid@gmail.com
  *
  * Basic goal: Write LJMD in CPP, but designed like LAMMPS
- * to illustrate modularity.
+ * to illustrate the LAMMPS implementation without all the
+ * other stuff.
  *
  * This code is intended for educational use only
  * and should not be used in a production type environment.
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-#include "mpi.h"
+#include "string.h"
 #include "stdlib.h"
-#include "error.h"
-#include "universe.h"
+#include "update.h"
 #include "memory.h"
-#include "atom.h"
+#include "error.h"
+#include "force.h"
 
 using namespace LJMD_NS;
 
-Atom::Atom(LJMD *ljmd) : Pointers(ljmd)
+Update::Update(LJMD *ljmd) : Pointers(ljmd)
 {
 
-  // Init values
-  natoms = 0;
-  x = v = f = NULL;
-  mass = NULL;
+  // Class Constructor
+
+  dt = 0.0;
+  nsteps = 0;
+  ntimestep = 0;  
+}
+
+Update::~Update()
+{
+  // Class Destructor
 
 }
 
-Atom::~Atom()
+void Update::init()
 {
-  //Cleanup
-  memory->destroy_2d_double_array(x);
-  memory->destroy_2d_double_array(v);
-  memory->destroy_2d_double_array(f);
+  //Initilize
+
 }
 
-void Atom::init()
+void Update::set_units(const char *style)
 {
   
-  // Allocate memory for coordinates, velocities and forces
-
-  x = memory->create_2d_double_array(natoms+1, 3, "atom:x");
-  v = memory->create_2d_double_array(natoms+1, 3, "atom:v");
-  f = memory->create_2d_double_array(natoms+1, 3, "atom:f");
-
+  // Setup constants and conversions for a particluar system
+  
+   if (strcmp(style,"lj") == 0) {
+     force->kboltz = 0.0019872067;       // Boltzman constant in kcal/mol/K 
+     force->mvsq2e = 2390.05736153349;   // m*v^2 in kcal/mol, Argon	    
+     force->mvv2e = 1.0;                 // conversion of mv^2 to energy
+     dt = 5.0;                           // Timestep in ns
+   }
+  
 }
-

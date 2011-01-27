@@ -11,48 +11,36 @@
  * Written by Chris MacDermaid; chris.macdermaid@gmail.com
  *
  * Basic goal: Write LJMD in CPP, but designed like LAMMPS
- * to illustrate modularity.
+ * to illustrate the LAMMPS implementation without all the
+ * other stuff.
  *
  * This code is intended for educational use only
  * and should not be used in a production type environment.
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-#include "mpi.h"
-#include "stdlib.h"
-#include "error.h"
-#include "universe.h"
-#include "memory.h"
-#include "atom.h"
+#ifndef LJMD_FORCE_H
+#define LJMD_FORCE_H
 
-using namespace LJMD_NS;
+#include "pointers.h"
 
-Atom::Atom(LJMD *ljmd) : Pointers(ljmd)
-{
+namespace LJMD_NS {
+  class Force : protected Pointers {
+  public:
 
-  // Init values
-  natoms = 0;
-  x = v = f = NULL;
-  mass = NULL;
+    //Constants and Conversions
+    double kboltz;     // Boltzman constat in kcal/mol/K
+    double mvsq2e;     // m*v^2 in kcal/mol, Argon
+    double mvv2e;      // Conversion of mv^2 to energy
+    
+    // Constructor & Destructor
+    Force(class LJMD *);
+    ~Force();
 
+    // Functions
+    void init();
+
+  };
 }
 
-Atom::~Atom()
-{
-  //Cleanup
-  memory->destroy_2d_double_array(x);
-  memory->destroy_2d_double_array(v);
-  memory->destroy_2d_double_array(f);
-}
-
-void Atom::init()
-{
-  
-  // Allocate memory for coordinates, velocities and forces
-
-  x = memory->create_2d_double_array(natoms+1, 3, "atom:x");
-  v = memory->create_2d_double_array(natoms+1, 3, "atom:v");
-  f = memory->create_2d_double_array(natoms+1, 3, "atom:f");
-
-}
-
+#endif

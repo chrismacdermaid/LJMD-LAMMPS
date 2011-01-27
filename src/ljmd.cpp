@@ -25,6 +25,8 @@
 #include "error.h"
 #include "universe.h"
 #include "atom.h"
+#include "update.h"
+#include "force.h"
 
 #include "stdlib.h"
 
@@ -81,12 +83,16 @@ LJMD::~LJMD()
 void LJMD::create()
 {
   atom = new Atom(this);
+  force = new Force(this);
+  update = new Update(this);
 }
 
 /* delete top level classes */
 
 void LJMD::destroy()
 {
+  delete update;
+  delete force;
   delete atom;
 }
 
@@ -95,5 +101,7 @@ void LJMD::destroy()
 void LJMD::init()
 {
   atom->init();
+  force->init();
+  update->init();
 }
   

@@ -55,7 +55,9 @@ namespace LJMD_NS {
 	  error(ptr->error),
 	  universe(ptr->universe),
 	  world(ptr->world),
-	  atom(ptr->atom) {}
+	  atom(ptr->atom),
+	  force(ptr->force),  
+	  update(ptr->update) {}
 
 	  virtual ~Pointers() {}
 	 
@@ -66,7 +68,9 @@ namespace LJMD_NS {
 	  Universe *&universe;
 	  
 	  Atom *&atom;
- 
+	  Force *&force;
+	  Update *&update;
+
 	  MPI_Comm &world;
 	};
 
