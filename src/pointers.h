@@ -50,11 +50,13 @@ namespace LJMD_NS {
 	class Pointers{
 	 public:
 	  Pointers(LJMD *ptr) : 
-	    ljmd(ptr),
-	    memory(ptr->memory),
-	    error(ptr->error),
-	    universe(ptr->universe),
-	    world(ptr->world) {}
+	  ljmd(ptr),
+	  memory(ptr->memory),
+	  error(ptr->error),
+	  universe(ptr->universe),
+	  world(ptr->world),
+	  atom(ptr->atom) {}
+
 	  virtual ~Pointers() {}
 	 
 	 protected:
@@ -62,6 +64,8 @@ namespace LJMD_NS {
 	  Memory *&memory;
 	  Error *&error;
 	  Universe *&universe;
+	  
+	  Atom *&atom;
  
 	  MPI_Comm &world;
 	};

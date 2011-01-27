@@ -24,12 +24,12 @@
 #include "memory.h"
 #include "error.h"
 #include "universe.h"
+#include "atom.h"
 
 #include "stdlib.h"
 
 /*
 #include "input.h"
-#include "atom.h"
 #include "update.h"
 #include "neighbor.h"
 #include "comm.h"
@@ -58,13 +58,42 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   world = universe->uworld;
 
   if (universe->me == 0)
-    fprintf(universe->uscreen, "Running on %d procs\n",universe->nprocs);
+    fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);
 
+  create();
+  init();
 }
 
 LJMD::~LJMD()
 {
+
+  //Kill top level classes
+  destroy ();
+  
+  // Delete fundamental classes
   delete universe;
   delete error;
   delete memory;
 }
+
+/* create top level classes */
+
+void LJMD::create()
+{
+  atom = new Atom(this);
+}
+
+/* delete top level classes */
+
+void LJMD::destroy()
+{
+  delete atom;
+}
+
+/* Init top level classes */
+
+void LJMD::init()
+{
+  atom->init();
+}
+  

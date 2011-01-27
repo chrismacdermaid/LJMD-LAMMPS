@@ -35,6 +35,9 @@ namespace LJMD_NS {
       class Error  *error;      // Error handling:              error.cpp/error.h
       class Universe *universe; // Universe of processors       universe.cpp/universe.h
 
+      // Top level classes
+      class Atom *atom;        // Atom based quantities         atom.cpp/atom.h
+
       MPI_Comm world;           // MPI Comm
 
       //Constructor and Destructor 
