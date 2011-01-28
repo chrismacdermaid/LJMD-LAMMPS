@@ -19,6 +19,9 @@
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
+/* Creates potential energy "styles", e.g. pair-styles (LJ, coul),
+   bond, angle and dihedral styles */
+
 #ifndef LJMD_FORCE_H
 #define LJMD_FORCE_H
 
@@ -28,9 +31,12 @@ namespace LJMD_NS {
   class Force : protected Pointers {
   public:
 
+    class Pair *pair;
+    char *pair_style;
+
     //Constants and Conversions
-    double kboltz;     // Boltzman constat in kcal/mol/K
-    double mvsq2e;     // m*v^2 in kcal/mol, Argon
+    double kboltz;     // Boltzman constant
+    double mvsq2e;     // m*v^2 
     double mvv2e;      // Conversion of mv^2 to energy
     
     // Constructor & Destructor
@@ -39,6 +45,10 @@ namespace LJMD_NS {
 
     // Functions
     void init();
+
+    void create_pair(const char *);
+    class Pair *new_pair(const char *);
+    class Pair *pair_match(const char *, int);
 
   };
 }

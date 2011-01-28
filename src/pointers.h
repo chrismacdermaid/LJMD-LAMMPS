@@ -57,7 +57,8 @@ namespace LJMD_NS {
 	  world(ptr->world),
 	  atom(ptr->atom),
 	  force(ptr->force),  
-	  update(ptr->update) {}
+	  update(ptr->update),
+	  modify(ptr->modify) {}
 
 	  virtual ~Pointers() {}
 	 
@@ -70,6 +71,7 @@ namespace LJMD_NS {
 	  Atom *&atom;
 	  Force *&force;
 	  Update *&update;
+	  Modify *&modify;
 
 	  MPI_Comm &world;
 	};

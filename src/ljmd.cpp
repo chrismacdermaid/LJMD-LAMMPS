@@ -27,6 +27,7 @@
 #include "atom.h"
 #include "update.h"
 #include "force.h"
+#include "modify.h"
 
 #include "stdlib.h"
 
@@ -63,7 +64,7 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
     fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);
 
   create();
-  init();
+  //init();
 }
 
 LJMD::~LJMD()
@@ -85,12 +86,14 @@ void LJMD::create()
   atom = new Atom(this);
   force = new Force(this);
   update = new Update(this);
+  modify = new Modify(this);
 }
 
 /* delete top level classes */
 
 void LJMD::destroy()
 {
+  delete mopdify;
   delete update;
   delete force;
   delete atom;
@@ -103,5 +106,6 @@ void LJMD::init()
   atom->init();
   force->init();
   update->init();
+  modify->init();
 }
   
