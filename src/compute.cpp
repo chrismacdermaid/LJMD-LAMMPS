@@ -19,51 +19,60 @@
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-/* Fix parent class. A fix is anything that modifies the system during timestepping
-   such as the atom positions or velocities, forces, momentum etc.. The child classes
-   actually provide the specific implementations such as NVE or NPT 
-*/
-
+#include "mpi.h"
+#include "stdlib.h"
 #include "string.h"
 #include "ctype.h"
-#include "fix.h"
+#include "compute.h"
+#include "lmptype.h"
+#include "atom.h"
 #include "memory.h"
 #include "error.h"
 
 using namespace LJMD_NS;
 
-Fix::Fix(LJMD *ljmd, int narg, char **arg) : Pointers(ljmd)
-{
+#define DELTA 4
+#define BIG 2000000000
 
-  // Fix ID
+#define MIN(A,B) ((A) < (B)) ? (A) : (B)
+#define MAX(A,B) ((A) > (B)) ? (A) : (B)
+
+Compute::Compute(LJMD *ljmd, int narg, char **arg) : Pointers(ljmd)
+{
+  if (narg < 3) error->all("Illegal compute command");
+
+  // compute ID, group, and style
+  // ID must be all alphanumeric chars or underscores
+
+  // The ID of the compute
   int n = strlen(arg[0]) + 1;
   id = new char[n];
   strcpy(id,arg[0]);
 
-  for (int i = 0; i < n-1; i++)
+ for (int i = 0; i < n-1; i++)
     if (!isalnum(id[i]) && id[i] != '_')
-      error->all("Fix ID must be alphanumeric or underscore characters");
+      error->all("Compute ID must be alphanumeric or underscore characters");
 
-  // Fix style
+
+  // The style of the compute
   n = strlen(arg[2]) + 1;
   style = new char[n];
   strcpy(style,arg[2]);
 
-  time_integrate = 0;
+  scalar = 0.0;
+  vector = NULL;
+  array = NULL;
 
-  // Integrator Masks
-  INITIAL_INTEGRATE = 1;
-  POST_INTEGRATE = 2;
-  FINAL_INTEGRATE = 4;
-  PRE_FORCE = 8;
-  POST_FORCE = 16;
-  END_OF_STEP = 32;
-  THERMO_ENERGY = 64;
 }
 
-Fix::~Fix()
+Compute::~Compute()
 {
   delete [] id;
   delete [] style;
 }
+
+
+
+
+
 

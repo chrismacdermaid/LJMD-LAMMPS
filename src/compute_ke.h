@@ -32,32 +32,29 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-#ifdef FIX_CLASS
+/* Computes the kinetic energy of the system */
 
-FixStyle(nve,FixNVE)
+#ifdef COMPUTE_CLASS
+
+ComputeStyle(ke,ComputeKE)
 
 #else
 
-#ifndef LJMD_FIX_NVE_H
-#define LJMD_FIX_NVE_H
+#ifndef LJMD_COMPUTE_KE_H
+#define LJMD_COMPUTE_KE_H
 
-#include "fix.h"
+#include "compute.h"
 
 namespace LJMD_NS {
 
-class FixNVE : public Fix {
+class ComputeKE : public Compute {
  public:
-  FixNVE(class LJMD *, int, char **);
-  
-  int setmask(); // Bit mask settings for the below functions
-  
-  virtual void init();
-  virtual void initial_integrate();
-  virtual void final_integrate();
-  void reset_dt();
+  ComputeKE(class LJMD *, int, char **);
+  void init();
+  double compute_scalar();
 
- protected:
-  double dtv,dtf;
+ private:
+  double pfactor;
 };
 
 }

@@ -19,31 +19,23 @@
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-/* Parent "pair" class denoting common functions/calls to all pair
-   calculations */
-
-#ifndef LJMD_PAIR_H
-#define LJMD_PAIR_H
+#ifndef LJMD_XXXX_H
+#define LJMD_XXXX_H
 
 #include "pointers.h"
 
 namespace LJMD_NS {
-  class Pair : protected Pointers {
+  class XXXX : protected Pointers {
   public:
-    
-  double eng_vdwl;    // vdw Energies
 
-  Pair(class LJMD *);
-  virtual ~Pair();
-  
-  // Parent class functions
-  void init();
+    // Constructor & Destructor
+    Xxxx(class LJMD *);
+    ~Xxxx();
 
-  // child class functions
-  virtual void init_style() {}
-  virtual void compute() {}
+    // Functions
+    void init();
 
- };
+  };
 }
 
 #endif

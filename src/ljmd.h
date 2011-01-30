@@ -42,7 +42,7 @@ namespace LJMD_NS {
       class Atom *atom;        // Atom based quantities         atom.cpp/atom.h
       class Update *update;    // Integrator based quantities   update.cpp/update.h
       class Force *force;      // Forces                        force.cpp/force.h
-      class Modify *modify     // Fixes and Computes            modify.cpp/modify.h
+      class Modify *modify;    // Fixes and Computes            modify.cpp/modify.h
 
       MPI_Comm world;           // MPI Comm
 

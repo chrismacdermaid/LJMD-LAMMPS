@@ -30,7 +30,7 @@ belongs to modify */
 
 #include "stdio.h"
 #include "pointers.h"
-#invlude "lmptype.h"
+#include "lmptype.h"
 
 namespace LJMD_NS {
   class Modify : protected Pointers {
@@ -43,8 +43,8 @@ namespace LJMD_NS {
     int n_end_of_step;
     int n_thermo_energy;
 
-    class Fix **fix       //List of fixes initilized
-    int *fmask            // Bit mask for applying fixes
+    class Fix **fix;      //List of fixes initilized
+    int *fmask;           // Bit mask for applying fixes
 
     // Computes
     int ncompute, maxcompute;  // Number of computes, max number of computes 
@@ -66,12 +66,13 @@ namespace LJMD_NS {
 
     //Fixes
     void add_fix(int, char **);
-    void delete_fix(int, char **);
+    void delete_fix(const char *);
     int find_fix(const char *);
     
     //Computes
     void add_compute(int, char **);
-    void delete_compute(int, char **);
+    void delete_compute(char *);
+    int find_compute(char *);
 
   private:
     int *list_initial_integrate, *list_post_integrate, *list_final_integrate;
@@ -81,13 +82,13 @@ namespace LJMD_NS {
 
     int *end_of_step_every;  // ?Not sure about this one. Invoked every step or every n steps?
     int n_timeflag;          // list of computes that store time invocation
-    int list_timeflag;
+    int *list_timeflag;
 
     /* Functions to create lists of invoked functions at specific 
        parts of the timestep. */
 
     void list_init(int, int &, int *&);
-    void list_end_of_step(int, int &, int *&);
+    void list_init_end_of_step(int, int &, int *&);
     void list_init_thermo_energy(int, int &, int *&);
     void list_init_compute();
     

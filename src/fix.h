@@ -28,7 +28,7 @@
 #define LJMD_FIX_H
 
 #include "pointers.h"
-#invlude "lmptype.h"
+#include "lmptype.h"
 
 namespace LJMD_NS {
   class Fix : protected Pointers {
@@ -36,6 +36,8 @@ namespace LJMD_NS {
     
     char *id,*style;
     int time_integrate;      // 1 if fix performs time integration, 0 otherwise.
+    int thermo_energy;       // 1 if fix_modify enabled ThEng, 0 if not
+    int nevery;              // how often to call an end_of_step fix
 
     // Mask settings, same in modify.cpp
 
@@ -43,9 +45,6 @@ namespace LJMD_NS {
     int PRE_FORCE, POST_FORCE;
     int END_OF_STEP;
     int THERMO_ENERGY;
-
-    Fix(class LJMD *, int, char **);
-    virtual ~Fix();
 
     virtual int setmask() = 0;
     

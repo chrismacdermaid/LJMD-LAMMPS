@@ -1,8 +1,8 @@
 /* ***********************************************************
  * JLMD++ A C++ version of LJMD motived by LAMMPS.
- 
+ *
  * http://sites.google.com/site/akohlmey/software/ljmd
-  and http://lammps.sandia.gov/
+ * and http://lammps.sandia.gov/
  * 
  * Some routines are taken in whole or in part from LJMD
  * or LAMMPS. This software is distributed under the 
@@ -11,7 +11,8 @@
  * Written by Chris MacDermaid; chris.macdermaid@gmail.com
  *
  * Basic goal: Write LJMD in CPP, but designed like LAMMPS
- * to illustrate modularity.
+ * to illustrate the LAMMPS implementation without all the
+ * other stuff.
  *
  * This code is intended for educational use only
  * and should not be used in a production type environment.
@@ -31,84 +32,41 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-
 #include "mpi.h"
-#include "string.h"
-#include "ljmd.h"
-#include "memory.h"
-#include "error.h"
-#include "universe.h"
+#include "compute_ke.h"
 #include "atom.h"
 #include "update.h"
 #include "force.h"
-#include "style_pair.h"
-#include "pair.h"
-
-/* Creates force "styles", e.g. pair-styles (LJ, coul),
-   bond, angle and dihedral styles used in tabulating the force */
-
+#include "error.h"
 
 using namespace LJMD_NS;
 
-Force::Force(LJMD *ljmd) : Pointers(ljmd)
+/* ---------------------------------------------------------------------- */
+
+ComputeKE::ComputeKE(LJMD *ljmd, int narg, char **arg) :
+  Compute(ljmd, narg, arg)
 {
-
-  // Class Constructor
-
-  /* Initialize constants and conversions they 
-     are defined in update.cpp/update.h */
-
-  kboltz = 0.0;
-  mvsq2e = 0.0;
-  mvv2e = 0.0;
-
-  // Styles
-  pair = NULL;
-
-  char *str = (char *) "none";
-  int n = strlen(str) + 1;
-  pair_style = new char[n];
-  strcpy(pair_style,str);
-}
-
-Force::~Force()
-{
-  //Class Destructor
-
-  delete [] pair_style;
-
-  // Delete styles
-  if (pair) delete pair;
+  if (narg != 3) error->all("Illegal compute ke command");
 
 }
 
-void Force::init()
+/* ---------------------------------------------------------------------- */
+
+void ComputeKE::init()
 {
-  // Initialize the styles
-  if (pair) pair->init();      
+  //  pfactor = 0.5 * force->mvv2e;
 }
 
-void Force::create_pair(const char *style)
+/* ---------------------------------------------------------------------- */
+
+double ComputeKE::compute_scalar()
 {
-  delete [] pair_style;
-  if (pair) delete pair;
+  double **v = atom->v;
 
-  pair = new_pair(style);
-  int n = strlen(style) + 1;
-  pair_style = new char[n];
-  strcpy(pair_style,style);
-}
+  double ke = 0.0;
+  scalar = 0.0;
 
-Pair *Force::new_pair(const char *style)
-{
-  if (strcmp(style,"none") == 0) return NULL;
-
-  #define PAIR_CLASS
-  #define PairStyle(key,Class) \
-    else if (strcmp(style,#key) == 0) return new Class(ljmd);
-  #include "style_pair.h"
-  #undef PAIR_CLASS
-
-  else error->all("Invalid pair style");
-  return NULL;
+  //  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
+  //scalar *= pfactor;
+  return scalar;
 }

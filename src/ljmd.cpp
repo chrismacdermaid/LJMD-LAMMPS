@@ -28,17 +28,16 @@
 #include "update.h"
 #include "force.h"
 #include "modify.h"
+#include "force.h"
+#include "modify.h"
 
 #include "stdlib.h"
 
 /*
 #include "input.h"
-#include "update.h"
 #include "neighbor.h"
 #include "comm.h"
 #include "domain.h"
-#include "force.h"
-#include "modify.h"
 #include "output.h"
 #include "timer.h"
 */
@@ -93,7 +92,7 @@ void LJMD::create()
 
 void LJMD::destroy()
 {
-  delete mopdify;
+  delete modify;
   delete update;
   delete force;
   delete atom;

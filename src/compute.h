@@ -19,31 +19,37 @@
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-/* Parent "pair" class denoting common functions/calls to all pair
-   calculations */
+/* Compute parent class*/
 
-#ifndef LJMD_PAIR_H
-#define LJMD_PAIR_H
+#ifndef LMP_COMPUTE_H
+#define LMP_COMPUTE_H
 
 #include "pointers.h"
+#include "lmptype.h"
+
 
 namespace LJMD_NS {
-  class Pair : protected Pointers {
+
+  class Compute : protected Pointers {
   public:
-    
-  double eng_vdwl;    // vdw Energies
-
-  Pair(class LJMD *);
-  virtual ~Pair();
   
-  // Parent class functions
-  void init();
+  char *id, *style;         // Style ID and name
+  int timeflag;             // 1 if Compute stores list of timesteps it's called on
 
-  // child class functions
-  virtual void init_style() {}
-  virtual void compute() {}
+  double scalar;            // computed global scalar
+  double *vector;           // computed global vector
+  double **array;           // computed global array
 
- };
+  double dof;         // degrees-of-freedom for temperature
+
+  Compute(class LJMD *, int, char **);
+  virtual ~Compute();
+
+  virtual void init() = 0;
+  virtual double compute_scalar() {return 0.0;}
+  virtual void compute_vector() {}
+  virtual void compute_array() {}      
+  };
 }
 
 #endif

@@ -27,11 +27,11 @@ belongs to modify */
 #include "stdio.h"
 #include "string.h"
 #include "modify.h"
-//#include "style_compute.h"
+#include "style_compute.h"
 #include "style_fix.h"
 #include "atom.h"
 #include "fix.h"
-//#include "compute.h"
+#include "compute.h"
 #include "update.h"
 #include "memory.h"
 #include "error.h"
@@ -104,8 +104,10 @@ Modify::~Modify()
 
 }
 
-Modify::init()
+void Modify::init()
 {
+
+  int i;
 
   /* All the fixes and computes should be created
      before this is called... */
@@ -163,7 +165,7 @@ void Modify::final_integrate()
    pre_force call, only for relevant fixes
 ------------------------------------------------------------------------- */
 
-void Modify::pre_force(int vflag)
+void Modify::pre_force()
 {
   for (int i = 0; i < n_pre_force; i++)
     fix[list_pre_force[i]]->pre_force();
@@ -173,7 +175,7 @@ void Modify::pre_force(int vflag)
    post_force call, only for relevant fixes
 ------------------------------------------------------------------------- */
 
-void Modify::post_force(int vflag)
+void Modify::post_force()
 {
   for (int i = 0; i < n_post_force; i++)
     fix[list_post_force[i]]->post_force();
@@ -233,7 +235,7 @@ void Modify::add_fix(int narg, char **arg)
    
   #define FIX_CLASS
   #define FixStyle(key,Class) \
-    else if (strcmp(arg[2],#key) == 0) fix[ifix] = new Class(lmp,narg,arg);
+    else if (strcmp(arg[2],#key) == 0) fix[ifix] = new Class(ljmd,narg,arg);
   #include "style_fix.h"
   #undef FIX_CLASS
 
@@ -307,7 +309,7 @@ void Modify::add_compute(int narg, char **arg)
 #define COMPUTE_CLASS
 #define ComputeStyle(key,Class) \
   else if (strcmp(arg[2],#key) == 0) \
-    compute[ncompute] = new Class(lmp,narg,arg);
+    compute[ncompute] = new Class(ljmd,narg,arg);
 #include "style_compute.h"
 #undef COMPUTE_CLASS
 

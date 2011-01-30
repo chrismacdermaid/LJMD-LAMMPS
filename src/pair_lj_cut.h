@@ -32,32 +32,30 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-#ifdef FIX_CLASS
+#ifdef PAIR_CLASS
 
-FixStyle(nve,FixNVE)
+PairStyle(lj/cut,PairLJCut)
 
 #else
 
-#ifndef LJMD_FIX_NVE_H
-#define LJMD_FIX_NVE_H
+#ifndef LJMD_PAIR_LJ_CUT_H
+#define LJMD_PAIR_LJ_CUT_H
 
-#include "fix.h"
+#include "pair.h"
 
 namespace LJMD_NS {
 
-class FixNVE : public Fix {
+class PairLJCut : public Pair {
  public:
-  FixNVE(class LJMD *, int, char **);
-  
-  int setmask(); // Bit mask settings for the below functions
-  
-  virtual void init();
-  virtual void initial_integrate();
-  virtual void final_integrate();
-  void reset_dt();
+  PairLJCut(class LJMD *);
+  virtual ~PairLJCut();
+
+  // 
+  virtual void compute();
+  virtual void init_style();
 
  protected:
-  double dtv,dtf;
+  double cut_global;
 };
 
 }
