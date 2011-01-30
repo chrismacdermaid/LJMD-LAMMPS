@@ -43,6 +43,7 @@ namespace LJMD_NS {
       class Update *update;    // Integrator based quantities   update.cpp/update.h
       class Force *force;      // Forces                        force.cpp/force.h
       class Modify *modify;    // Fixes and Computes            modify.cpp/modify.h
+      class Domain *domain;    // Box boundries and pbc         domain.cpp/domain.h 
 
       MPI_Comm world;           // MPI Comm
 

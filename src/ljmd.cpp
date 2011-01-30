@@ -30,6 +30,7 @@
 #include "modify.h"
 #include "force.h"
 #include "modify.h"
+#include "domain.h"
 
 #include "stdlib.h"
 
@@ -37,7 +38,6 @@
 #include "input.h"
 #include "neighbor.h"
 #include "comm.h"
-#include "domain.h"
 #include "output.h"
 #include "timer.h"
 */
@@ -82,6 +82,7 @@ LJMD::~LJMD()
 
 void LJMD::create()
 {
+  domain = new Domain(this);
   atom = new Atom(this);
   force = new Force(this);
   update = new Update(this);
@@ -96,12 +97,14 @@ void LJMD::destroy()
   delete update;
   delete force;
   delete atom;
+  delete domain;
 }
 
 /* Init top level classes */
 
 void LJMD::init()
 {
+  domain->init();  
   atom->init();
   force->init();
   update->init();
