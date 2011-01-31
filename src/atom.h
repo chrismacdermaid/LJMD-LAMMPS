@@ -32,10 +32,18 @@ namespace LJMD_NS {
 	  public :
 	    
 	    bigint natoms;   // Total number of atoms in the system
-	    double **x;      // coordinates
-	    double **v;      // velocities
-	    double **f;      // force
-	    double *mass;    // mass of atoms
+	    double mass;     // mass of atoms
+	    double epsilon;  // LJ epsilon parameter
+            double sigma;    // LJ sigma parameter   
+            double *rx;      // x coordinates
+            double *ry;      // y coordinates
+            double *rz;      // z coordinates
+	    double *vx;      // x velocities
+	    double *vy;      // y velocities
+	    double *vz;      // z velocities
+	    double *fx;      // x force
+	    double *fy;      // y force
+	    double *fz;      // z force
 	    
 	    Atom(class LJMD *); // Constructor
 	    ~Atom();            // Destructor

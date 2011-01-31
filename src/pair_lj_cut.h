@@ -50,9 +50,21 @@ class PairLJCut : public Pair {
   PairLJCut(class LJMD *);
   virtual ~PairLJCut();
 
-  // 
+  // Precompute constants
+  double c12;
+  double c6;
+  double rcsq; //pair distance cutoff squared 
+
+  // Temporary force storage
+  double *cx;
+  double *cy;
+  double *cz;
+
+  //Functions  
   virtual void compute();
   virtual void init_style();
+  virtual void clear_force();
+  virtual void allocate();
 
  protected:
   double cut_global;

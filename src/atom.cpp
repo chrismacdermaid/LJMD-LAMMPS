@@ -32,17 +32,28 @@ Atom::Atom(LJMD *ljmd) : Pointers(ljmd)
 
   // Init values
   natoms = 0;
-  x = v = f = NULL;
+  epsilon = 0;
+  sigma = 0;
   mass = NULL;
+
+  rx = ry = rz = NULL; 
+  vx = vy = vz = NULL; 
+  fx = fy = fz = NULL; 
 
 }
 
 Atom::~Atom()
 {
   //Cleanup
-  memory->destroy_2d_double_array(x);
-  memory->destroy_2d_double_array(v);
-  memory->destroy_2d_double_array(f);
+  memory->destroy_1d_double_array(rx, 0);
+  memory->destroy_1d_double_array(ry, 0);
+  memory->destroy_1d_double_array(rz, 0);
+  memory->destroy_1d_double_array(vx, 0);
+  memory->destroy_1d_double_array(vy, 0);
+  memory->destroy_1d_double_array(vz, 0);
+  memory->destroy_1d_double_array(fx, 0);
+  memory->destroy_1d_double_array(fy, 0);
+  memory->destroy_1d_double_array(fz, 0);
 }
 
 void Atom::init()
@@ -50,9 +61,14 @@ void Atom::init()
   
   // Allocate memory for coordinates, velocities and forces
 
-  x = memory->create_2d_double_array(natoms+1, 3, "atom:x");
-  v = memory->create_2d_double_array(natoms+1, 3, "atom:v");
-  f = memory->create_2d_double_array(natoms+1, 3, "atom:f");
-
+  rx = memory->create_1d_double_array(0, natoms, "atom:rx");
+  ry = memory->create_1d_double_array(0, natoms, "atom:ry");
+  rz = memory->create_1d_double_array(0, natoms, "atom:rz");
+  vx = memory->create_1d_double_array(0, natoms, "atom:vx");
+  vy = memory->create_1d_double_array(0, natoms, "atom:vy");
+  vz = memory->create_1d_double_array(0, natoms, "atom:vz");
+  fx = memory->create_1d_double_array(0, natoms, "atom:fx");
+  fy = memory->create_1d_double_array(0, natoms, "atom:fy");
+  fz = memory->create_1d_double_array(0, natoms, "atom:fz");
 }
 

@@ -71,13 +71,11 @@ void Domain::set_initial_box()
 
 }
 
-void Domain::pbc()
+double Domain::pbc(double x, const double boxby2, const double box)                                                                                                                                                                   
 {
 
-  // Helper for pbc
-
+  // Potentially inline this function into the force calculation; 
+     while (x >  boxby2) x -= box;  
+     while (x < -boxby2) x += box;  
+     return x;
 }
-  
-
-
-

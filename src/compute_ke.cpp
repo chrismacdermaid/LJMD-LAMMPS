@@ -61,7 +61,9 @@ void ComputeKE::init()
 
 double ComputeKE::compute_scalar()
 {
-  double **v = atom->v;
+  double *vx = atom->vx;
+  double *vy = atom->vy;
+  double *vz = atom->vz;
 
   double ke = 0.0;
   scalar = 0.0;

@@ -40,7 +40,7 @@ namespace LJMD_NS {
 
      void init();
      void set_initial_box();                 // Setup initial box
-     void pbc();                             // pbc helper
+     double pbc(double, const double, const double);  // pbc helper
 
   };
 }

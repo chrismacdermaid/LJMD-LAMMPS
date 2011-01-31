@@ -19,9 +19,9 @@
  * Results should not be trusted. You've been warned.  
  ********************************************************** */
 
-/* Creates and manages fixes and computes dynamically,
-thus, anything that modifes the system's properties 
-belongs to modify */
+/* Creates and manages fixes and computes dynamically.
+Anything that modifes or computes the system's properties 
+belongs to modify & fix/compute */
 
 
 #include "stdio.h"

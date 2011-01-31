@@ -62,8 +62,10 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   if (universe->me == 0)
     fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);
 
-  create();
-  //init();
+  create();  //Create the top level classes
+//  init();    // Initialize the top level classes 
+
+  setup(); // Setup the LJ system  
 }
 
 LJMD::~LJMD()
@@ -110,4 +112,45 @@ void LJMD::init()
   update->init();
   modify->init();
 }
-  
+
+void LJMD::setup()
+{
+    /* Setup an LJMD run. This is temporary until an input parser is written */
+
+    // Set up 20x20x20 bounding box and initialize it
+    domain->x = domain->y = domain->z = 17.1580;
+    domain->init();
+
+    /* Specify number of atoms in the system, allocate memory
+       for the positions, velocities, and forces, specify atom properties */
+    atom->natoms = 100;
+    atom->init();
+    atom->mass = 39.948; 
+    atom->epsilon = 0.2379; 
+    atom->sigma = 3.405; 
+
+    // Set the appropirate units, conversions and timestep for our system
+    update->set_units("lj");    
+    update->nsteps = 10000;
+
+    // Setup the pair potential for the force calculation 
+    force->create_pair("lj/cut"); 
+    force->init(); 
+
+    // Create fix for nve calculation and integration   
+    char **newarg = new char*[1];
+    newarg[0] = 0;
+    newarg[1] = (char *) "all";
+    newarg[2] = (char *) "nve";
+    modify->add_fix(0, newarg);
+
+    // Initialize fix
+    modify->init();
+}
+
+
+
+
+
+
+

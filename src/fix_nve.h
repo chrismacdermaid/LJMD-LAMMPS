@@ -57,7 +57,7 @@ class FixNVE : public Fix {
   void reset_dt();
 
  protected:
-  double dtv,dtf;
+  double dtmf;
 };
 
 }

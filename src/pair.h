@@ -32,6 +32,7 @@ namespace LJMD_NS {
   public:
     
   double eng_vdwl;    // vdw Energies
+  double rcut;        // Distance Cutoff for pair potential 
 
   Pair(class LJMD *);
   virtual ~Pair();
@@ -42,6 +43,10 @@ namespace LJMD_NS {
   // child class functions
   virtual void init_style() {}
   virtual void compute() {}
+
+  protected:
+
+  int allocated;  // 0/1 if allocated memory 
 
  };
 }

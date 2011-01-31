@@ -14,4 +14,5 @@ The goals of this project are the following:
 5. Include many comments so as to be readable and understandable to novices.
 6. Retain the basic idea in LJMD, but use the CPP paradigms found in the LAMMPS code.
 
-mpicxx -arch i386  ljmd.cpp error.cpp memory.cpp universe.cpp main.cpp -o ljmd
+#mpicxx -arch i386  ljmd.cpp error.cpp memory.cpp universe.cpp main.cpp -o ljmd
+mpicxx -arch i386  ljmd.cpp error.cpp memory.cpp universe.cpp atom.cpp modify.cpp update.cpp compute.cpp force.cpp pair.cpp compute_ke.cpp fix_nve.cpp fix.cpp pair_lj_cut.cpp domain.cpp main.cpp -o ljmd

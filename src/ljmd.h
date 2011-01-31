@@ -54,6 +54,7 @@ namespace LJMD_NS {
       void create();
       void init();
       void destroy();
+      void setup();  
   };
 }
 
