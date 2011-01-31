@@ -68,14 +68,37 @@ int FixNVE::setmask()
 void FixNVE::init()
 {
 
+    dtmf = 0.5*update->dt / force->mvsq2e / atom->mass;
+
 }
 
 /* ----------------------------------------------------------------------
-   allow for both per-type and per-atom mass
 ------------------------------------------------------------------------- */
 
 void FixNVE::initial_integrate()
 {
+
+  double *rx = atom->rx;
+  double *ry = atom->ry;
+  double *rz = atom->rz;
+  double *vx = atom->vx;
+  double *vy = atom->vy;
+  double *vz = atom->vz;
+  double *fx = atom->fx;
+  double *fy = atom->fy;
+  double *fz = atom->fz;
+
+  /* Update velocities by half, positions by full step */
+
+  for (int i = 0; i < atom->natoms; i++) {
+    vx[i] += dtmf * fx[i];
+    vy[i] += dtmf * fy[i];
+    vz[i] += dtmf * fz[i];
+
+    rx[i] += update->dt * vx[i]; 
+    ry[i] += update->dt * vy[i]; 
+    rz[i] += update->dt * vz[i]; 
+  }
 
 }
 
@@ -83,11 +106,20 @@ void FixNVE::initial_integrate()
 
 void FixNVE::final_integrate()
 {
+  double *vx = atom->vx;
+  double *vy = atom->vy;
+  double *vz = atom->vz;
+  double *fx = atom->fx;
+  double *fy = atom->fy;
+  double *fz = atom->fz;
 
+  /* Propagate velocities by another half step */
+  
+  for (int i = 0; i < atom->natoms; i++) {
+    vx[i] += dtmf * fx[i];
+    vy[i] += dtmf * fy[i];
+    vz[i] += dtmf * fz[i];
+  }
 }
 
 /* ---------------------------------------------------------------------- */
-
-void FixNVE::reset_dt()
-{
-}

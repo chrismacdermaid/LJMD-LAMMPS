@@ -144,13 +144,6 @@ void LJMD::setup()
     newarg[2] = (char *) "nve";
     modify->add_fix(0, newarg);
 
-    // Initialize fix
+    // Initialize fix and computes
     modify->init();
 }
-
-
-
-
-
-
-

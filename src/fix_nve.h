@@ -54,7 +54,6 @@ class FixNVE : public Fix {
   virtual void init();
   virtual void initial_integrate();
   virtual void final_integrate();
-  void reset_dt();
 
  protected:
   double dtmf;
