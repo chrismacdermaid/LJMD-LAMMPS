@@ -110,6 +110,7 @@ void PairLJCut::compute()
   
   int natoms = atom->natoms;
 
+  // vdw pe
   eng_vdwl = 0.0; 
 
   // Zero the force array
@@ -142,7 +143,7 @@ void PairLJCut::compute()
       dry = domain->pbc(ry1 - ry[j], domain->yby2, domain->y);
       drz = domain->pbc(rz1 - rz[j], domain->zby2, domain->z);
     
-      rsq = drz*drx + dry*dry + drz*drz;
+      rsq = drx*drx + dry*dry + drz*drz;
 
       /* Compute force if within cutoff */
 
@@ -153,6 +154,7 @@ void PairLJCut::compute()
         r6 = rinv * rinv * rinv;
 
         ffac = (12.0*c12*r6 - 6.0*c6)*r6*rinv;
+        eng_vdwl += r6*(c12*r6 - c6);
 
         cx[i] += drx * ffac;
         cy[i] += dry * ffac;
@@ -168,6 +170,9 @@ void PairLJCut::compute()
   MPI_Reduce(cx, fx, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
   MPI_Reduce(cy, fy, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
   MPI_Reduce(cz, fz, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
+  
+  /* Sum potential - This is done in the compute_pe section */
+  //MPI_Reduce(&epot, &eng_vdw, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
 }
 
 void PairLJCut::clear_force()

@@ -47,8 +47,6 @@ namespace LJMD_NS {
 
   virtual void init() = 0;
   virtual double compute_scalar() {return 0.0;}
-  virtual void compute_vector() {}
-  virtual void compute_array() {}      
   };
 }
 

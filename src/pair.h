@@ -31,8 +31,8 @@ namespace LJMD_NS {
   class Pair : protected Pointers {
   public:
     
-  double eng_vdwl;    // vdw Energies
   double rcut;        // Distance Cutoff for pair potential 
+  double eng_vdwl;    // VDW energies      
 
   Pair(class LJMD *);
   virtual ~Pair();

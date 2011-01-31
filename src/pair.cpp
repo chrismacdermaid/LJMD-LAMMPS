@@ -40,7 +40,6 @@ using namespace LJMD_NS;
 
 Pair::Pair(LJMD *ljmd) : Pointers(ljmd)
 {
-
   eng_vdwl = 0.0;
   rcut = 0.0;
   allocated = 0;
