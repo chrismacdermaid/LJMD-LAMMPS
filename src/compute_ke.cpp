@@ -38,6 +38,7 @@
 #include "update.h"
 #include "force.h"
 #include "error.h"
+#include "universe.h"
 
 using namespace LJMD_NS;
 
@@ -54,7 +55,7 @@ ComputeKE::ComputeKE(LJMD *ljmd, int narg, char **arg) :
 
 void ComputeKE::init()
 {
-  //  pfactor = 0.5 * force->mvv2e;
+  pfactor = 0.5 * force->mvsq2e * atom -> mass;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -66,9 +67,21 @@ double ComputeKE::compute_scalar()
   double *vz = atom->vz;
 
   double ke = 0.0;
-  scalar = 0.0;
+  
+  /* Do we need to broadcast the velocities here? */
 
-  //  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
-  //scalar *= pfactor;
+  for (int ii = 0; ii < atom->natoms; ii += universe->nprocs) {
+    
+    int i;
+    
+    i = ii + universe->me;
+
+    if (i > atom->natoms) break;
+
+    ke += vx[i]*vx[i] + vy[i]*vy[i] + vz[i]*vz[i];
+  }
+
+  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,universe->uworld);
+  scalar *= pfactor;
   return scalar;
 }

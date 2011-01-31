@@ -50,7 +50,7 @@ namespace LJMD_NS {
 	    
 	    // Functions
 	    void init();
-	
+            int count_words(const char *);	
 
   };
 }
