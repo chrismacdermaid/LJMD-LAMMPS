@@ -11,8 +11,7 @@
  * Written by Chris MacDermaid; chris.macdermaid@gmail.com
  *
  * Basic goal: Write LJMD in CPP, but designed like LAMMPS
- * to illustrate the LAMMPS implementation without all the
- * other stuff.
+ * to illustrate modularity.
  *
  * This code is intended for educational use only
  * and should not be used in a production type environment.
@@ -32,56 +31,27 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-// Pointers class contains ptrs to master copy of
-// fundamental LJMD class ptrs stored in ljmd.h
-// every LJMD class inherits from Pointers to access ljmd.h ptrs
-// these variables are auto-initialized by Pointer class constructor
-// *& variables are really pointers to the pointers in lammps.h
-// & enables them to be accessed directly in any class, e.g. error->all()
+#ifndef LJMD_OUTPUT_H
+#define LJMD_OUTPUT_H
 
-#ifndef LJMD_POINTERS_H
-#define LJMD_POINTERS_H
-
-#include "mpi.h"
-#include "ljmd.h"
+#include "pointers.h"
+#include "lmptype.h"
 
 namespace LJMD_NS {
 
-	class Pointers{
-	 public:
-	  Pointers(LJMD *ptr) : 
-	  ljmd(ptr),
-	  memory(ptr->memory),
-	  error(ptr->error),
-	  universe(ptr->universe),
-	  atom(ptr->atom),
-	  force(ptr->force),  
-	  update(ptr->update),
-	  modify(ptr->modify),
-          domain(ptr->domain),
-          output(ptr->output),
-          screen(ptr->screen),
-	  world(ptr->world) {}
+class Output : protected Pointers {
+ public:
 
-	  virtual ~Pointers() {}
-	 
-	 protected:
-	  LJMD *ljmd;
-	  Memory *&memory;
-	  Error *&error;
-	  Universe *&universe;
-	  
-	  Atom *&atom;
-	  Force *&force;
-	  Update *&update;
-	  Modify *&modify;
-          Domain *&domain;
-          Output *&output;
-          
-          FILE *&screen;
-	  MPI_Comm &world;
-	};
+    class Thermo *thermo;        // Thermodynamic computations
 
+    Output(class LJMD *);
+    ~Output();
+
+    void init();
+    void setup();                   // initial output before run/min
+    void create_thermo(int, char **);  // create a thermo style
+    void write();                // output for current timestep
+  };
 }
 
 #endif

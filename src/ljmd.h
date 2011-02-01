@@ -44,9 +44,10 @@ namespace LJMD_NS {
       class Force *force;      // Forces                        force.cpp/force.h
       class Modify *modify;    // Fixes and Computes            modify.cpp/modify.h
       class Domain *domain;    // Box boundries and pbc         domain.cpp/domain.h 
+      class Output *output;    // Dumps and screen/log output   output.cpp/output.h    
 
-      MPI_Comm world;           // MPI Comm
       FILE *screen;             // screen output
+      MPI_Comm world;           // MPI Comm
 
       //Constructor and Destructor 
       LJMD(int, char**, MPI_Comm);
