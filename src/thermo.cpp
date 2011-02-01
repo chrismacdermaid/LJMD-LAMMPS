@@ -151,9 +151,9 @@ void Thermo::init()
 
 void Thermo::allocate()
 {
-  // n = specified fields + Volume field (added at run time)
+  // n = specified fields
 
-  int n = nfield_initial + 1;
+  int n = nfield_initial;
 
   keyword = new char*[n];
   for (int i = 0; i < n; i++) keyword[i] = new char[32];
@@ -228,6 +228,7 @@ void Thermo::parse_fields(char *str)
       addfield("TotEng",&Thermo::compute_etotal,FLOAT);
       index_temp = add_compute(id_temp,SCALAR);
       index_pe = add_compute(id_pe,SCALAR);
+    
     } else error->all("Invalid keyword in thermo_style custom command");
 
     word = strtok(NULL," \0");
@@ -257,7 +258,7 @@ void Thermo::header()
   sprintf(&line[loc],"\n");
   
   if (me == 0) {
-    fprintf(screen,line);
+    //fprintf(screen,line);
   }
 }
 
@@ -286,7 +287,7 @@ void Thermo::compute()
   }
 
   if (me == 0) {
-    fprintf(screen,line);
+    //fprintf(screen,line);
   }
 }
 

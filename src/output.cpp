@@ -46,6 +46,7 @@
 #include "force.h"
 #include "memory.h"
 #include "error.h"
+#include "universe.h"
 
 using namespace LJMD_NS;
 

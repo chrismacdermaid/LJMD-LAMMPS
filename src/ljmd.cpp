@@ -46,8 +46,7 @@ using namespace LJMD_NS;
 
 /* ************************************************************
    Startup an instance of LJMD and allocate fundamental classes
-   memory, error, universe, input. Initilize comm. Parse input
-   switches.
+   memory, error, universe, input. Initilize comm.
   ********************************************************** */
 
 LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
@@ -97,6 +96,7 @@ void LJMD::create()
 
 void LJMD::destroy()
 {
+  delete output;
   delete modify;
   delete update;
   delete force;
@@ -140,6 +140,7 @@ void LJMD::setup()
     // Setup the pair potential for the force calculation 
     force->create_pair("lj/cut"); 
     force->init(); 
+    
 
     // Create fix for nve calculation and integration   
     char **newarg = new char*[1];
