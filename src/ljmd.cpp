@@ -58,6 +58,7 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   universe = new Universe(this, communicator);
 
   world = universe->uworld;
+  screen = universe->uscreen;      
 
   if (universe->me == 0)
     fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);

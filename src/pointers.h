@@ -59,7 +59,8 @@ namespace LJMD_NS {
 	  force(ptr->force),  
 	  update(ptr->update),
 	  modify(ptr->modify),
-          domain(ptr->domain) {}
+          domain(ptr->domain),
+          screen(ptr->screen) {}
 
 	  virtual ~Pointers() {}
 	 
@@ -74,7 +75,8 @@ namespace LJMD_NS {
 	  Update *&update;
 	  Modify *&modify;
           Domain *&domain;
-
+          
+          FILE *&screen;
 	  MPI_Comm &world;
 	};
 

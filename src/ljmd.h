@@ -46,6 +46,7 @@ namespace LJMD_NS {
       class Domain *domain;    // Box boundries and pbc         domain.cpp/domain.h 
 
       MPI_Comm world;           // MPI Comm
+      FILE *screen;             // screen output
 
       //Constructor and Destructor 
       LJMD(int, char**, MPI_Comm);
