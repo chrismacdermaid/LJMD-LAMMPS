@@ -31,6 +31,7 @@
 #include "force.h"
 #include "modify.h"
 #include "domain.h"
+#include "output.h"
 
 #include "stdlib.h"
 
@@ -38,7 +39,6 @@
 #include "input.h"
 #include "neighbor.h"
 #include "comm.h"
-#include "output.h"
 #include "timer.h"
 */
 
@@ -90,6 +90,7 @@ void LJMD::create()
   force = new Force(this);
   update = new Update(this);
   modify = new Modify(this);
+  output = new Output(this);
 }
 
 /* delete top level classes */
@@ -116,7 +117,9 @@ void LJMD::init()
 
 void LJMD::setup()
 {
-    /* Setup an LJMD run. This is temporary until an input parser is written */
+    /* Setup an LJMD run. This is temporary until an input parser is written
+     * the general idea is to set all the necesary params, units, fixes etc 
+     * and then initialize the classes */
 
     // Set up 20x20x20 bounding box and initialize it
     domain->x = domain->y = domain->z = 17.1580;
@@ -125,10 +128,10 @@ void LJMD::setup()
     /* Specify number of atoms in the system, allocate memory
        for the positions, velocities, and forces, specify atom properties */
     atom->natoms = 100;
-    atom->init();
     atom->mass = 39.948; 
     atom->epsilon = 0.2379; 
     atom->sigma = 3.405; 
+    atom->init();
 
     // Set the appropirate units, conversions and timestep for our system
     update->set_units("lj");    
@@ -147,4 +150,9 @@ void LJMD::setup()
 
     // Initialize fix and computes
     modify->init();
+
+    /* The output defaults and thermo/computes are set in the 
+     * output constructor, here we setup the output to screen
+     * and calculate the initial values of ke, pe and temp of our system */
+    output->setup();
 }
