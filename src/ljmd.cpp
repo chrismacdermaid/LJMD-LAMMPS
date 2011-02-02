@@ -33,6 +33,7 @@
 #include "domain.h"
 #include "output.h"
 #include "input.h"
+#include "pair.h"
 
 #include "stdlib.h"
 
@@ -127,7 +128,7 @@ void LJMD::setup()
      * the general idea is to set all the necesary params, units, fixes etc 
      * and then initialize the classes */
 
-    // Set up 20x20x20 bounding box and initialize it
+    // Set up bounding box and initialize it
     domain->x = domain->y = domain->z = 17.1580;
     domain->init();
 
@@ -166,4 +167,8 @@ void LJMD::setup()
      * and calculate the initial values of ke, pe and temp of our system */
     output->init();
     output->setup();
+
+    force->pair->compute();
+
+    atom->aprint();     
 }

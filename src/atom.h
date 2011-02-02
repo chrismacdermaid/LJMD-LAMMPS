@@ -51,7 +51,8 @@ namespace LJMD_NS {
 	    // Functions
 	    void init();
             int count_words(const char *);	
-            void azzero();
+            void azzero();    // Zero the position, velocity and force arrays. 
+            void aprint();    // Print out position, velocities and forces for all atoms. 
   };
 }
 

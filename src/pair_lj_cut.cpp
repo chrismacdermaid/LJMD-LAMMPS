@@ -74,9 +74,16 @@ PairLJCut::~PairLJCut()
 {
 
   if (allocated) {
+    
+    delete [] cx;
+    delete [] cy;
+    delete [] cz;
+/*
     memory->destroy_1d_double_array(cx, 0);
     memory->destroy_1d_double_array(cy, 0);
     memory->destroy_1d_double_array(cz, 0);
+*/
+
   }
 
 }
@@ -93,6 +100,9 @@ void PairLJCut::init_style()
      c6  = 4.0*atom->epsilon*pow(atom->sigma, 6.0);
 
      rcsq = rcut * rcut;
+
+     // Allocate temp storage for forces
+     allocate(); 
 }
 
 
@@ -120,6 +130,7 @@ void PairLJCut::compute()
   MPI_Bcast(rx, natoms, MPI_DOUBLE, 0, universe->uworld); 
   MPI_Bcast(ry, natoms, MPI_DOUBLE, 0, universe->uworld); 
   MPI_Bcast(rz, natoms, MPI_DOUBLE, 0, universe->uworld); 
+
 
   /* The main force loop, assign each proc an index to work on
      in the upper triangular part of the force matrix */  
@@ -195,8 +206,14 @@ void PairLJCut::allocate()
     allocated = 1;
 
     /* Allocate memory for temporary storage of forces */  
+    cx = new double[atom->natoms];
+    cy = new double[atom->natoms];
+    cz = new double[atom->natoms];
+
+    /*
     cx = memory->create_1d_double_array(0, atom->natoms, "pair:cx");
     cy = memory->create_1d_double_array(0, atom->natoms, "pair:cy");
     cz = memory->create_1d_double_array(0, atom->natoms, "pair:cz");
+    */
 }
 

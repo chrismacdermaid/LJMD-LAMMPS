@@ -57,7 +57,7 @@ Atom::~Atom()
   
   delete [] fx; 
   delete [] fy; 
-  delete [] fz; 
+ // delete [] fz; 
 
 }
 
@@ -121,4 +121,19 @@ void Atom::azzero()
     *fy++ = 0.0;
     *fz++ = 0.0;
   }
+}
+
+/* Print out the positions, velocities and forces */ 
+
+void Atom::aprint()
+{  
+  
+  if (universe->me == 0)
+    for (int i = 0; i < natoms; i++) {
+      
+      fprintf(screen, "r = %5d %15.6lf %15.6lf %15.6lf\n", i, rx[i], ry[i], rz[i]);
+      fprintf(screen, "v = %5d %15.6lf %15.6lf %15.6lf\n", i, vx[i], vy[i], vz[i]); 
+      fprintf(screen, "f = %5d %15.6lf %15.6lf %15.6lf\n", i, fx[i], fy[i], fz[i]); 
+      
+    }
 }
