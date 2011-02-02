@@ -63,13 +63,12 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   if (universe->me == 0)
     fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);
 
+
   create();  //Create the top level classes
-//  init();    // Initialize the top level classes 
+  //init();    // Initialize the top level classes 
 
 
   setup(); // Setup the LJ system  
-
-
 
 }
 
@@ -124,6 +123,9 @@ void LJMD::init()
 
 void LJMD::setup()
 {
+
+  fprintf(screen,"MY ID: %d\n", universe->me);
+
     /* Setup an LJMD run. This is temporary until an input parser is written
      * the general idea is to set all the necesary params, units, fixes etc 
      * and then initialize the classes */
@@ -140,17 +142,18 @@ void LJMD::setup()
     atom->sigma = 3.405; 
     atom->init();
 
-    // Set the appropirate units, conversions and timestep for our system
-    update->set_units("lj");    
-    update->nsteps = 10000;
-
     //Set restart name and read in the restart file
     input->restfile = (char *) "argon_108.rest";
     input->read_restart();  
 
+    // Set the appropirate units, conversions and timestep for our system
+    update->set_units("lj");    
+    update->nsteps = 10000;
+    
     // Setup the pair potential for the force calculation 
     force->create_pair("lj/cut"); 
     force->init(); 
+    
 
     // Create fix for nve calculation and integration   
     char **newarg = new char*[2];
@@ -162,13 +165,16 @@ void LJMD::setup()
     // Initialize fix and computes
     modify->init();
 
+
+    // Compute initial forces on atoms
+    force->pair->compute();
+    
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
      * and calculate the initial values of ke, pe and temp of our system */
-    output->init();
-    output->setup();
+//    output->init();
+//    output->setup();
 
-    force->pair->compute();
 
-    atom->aprint();     
+//    atom->aprint();     
 }

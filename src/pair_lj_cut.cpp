@@ -117,7 +117,10 @@ void PairLJCut::compute()
   double *fx = atom->fx;
   double *fy = atom->fy;
   double *fz = atom->fz;
-  
+ 
+  if (universe->me == 1)
+    atom->aprint();
+
   int natoms = atom->natoms;
 
   // vdw pe
@@ -131,14 +134,14 @@ void PairLJCut::compute()
   MPI_Bcast(ry, natoms, MPI_DOUBLE, 0, universe->uworld); 
   MPI_Bcast(rz, natoms, MPI_DOUBLE, 0, universe->uworld); 
 
-
   /* The main force loop, assign each proc an index to work on
      in the upper triangular part of the force matrix */  
-  
+ 
   int ii;
   for (ii = 0; ii < (natoms-1); ii += universe->nprocs) {   
     int i,j;
     double rx1, ry1, rz1;
+
 
     i = ii + universe->me;
     if (i >= (natoms-1)) break;
