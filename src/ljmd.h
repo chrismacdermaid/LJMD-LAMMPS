@@ -45,6 +45,7 @@ namespace LJMD_NS {
       class Modify *modify;    // Fixes and Computes            modify.cpp/modify.h
       class Domain *domain;    // Box boundries and pbc         domain.cpp/domain.h 
       class Output *output;    // Dumps and screen/log output   output.cpp/output.h    
+      class Input *input;      // Parse input and read restart  input.cpp/input.h
 
       FILE *screen;             // screen output
       MPI_Comm world;           // MPI Comm

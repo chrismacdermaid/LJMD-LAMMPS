@@ -7,7 +7,7 @@ LIB=-lm
 OBJ= atom.o compute.o compute_ke.o compute_pe.o compute_temp.o\
 	domain.o error.o fix.o fix_nve.o force.o ljmd.o main.o\
 	memory.o modify.o output.o pair.o pair_lj_cut.o thermo.o\
-	universe.o update.o
+	universe.o update.o input.o
 
 ALL=ljmd
 

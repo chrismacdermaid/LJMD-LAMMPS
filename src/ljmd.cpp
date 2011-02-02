@@ -32,11 +32,11 @@
 #include "modify.h"
 #include "domain.h"
 #include "output.h"
+#include "input.h"
 
 #include "stdlib.h"
 
 /*
-#include "input.h"
 #include "neighbor.h"
 #include "comm.h"
 #include "timer.h"
@@ -88,20 +88,20 @@ LJMD::~LJMD()
 
 void LJMD::create()
 {
-
-
   domain = new Domain(this);
   atom = new Atom(this);
   force = new Force(this);
   update = new Update(this);
   modify = new Modify(this);
   output = new Output(this);
+  input = new Input(this);
 }
 
 /* delete top level classes */
 
 void LJMD::destroy()
 {
+  delete input;
   delete output;
   delete modify;
   delete update;
@@ -133,7 +133,7 @@ void LJMD::setup()
 
     /* Specify number of atoms in the system, allocate memory
        for the positions, velocities, and forces, specify atom properties */
-    atom->natoms = 100;
+    atom->natoms = 108;
     atom->mass = 39.948; 
     atom->epsilon = 0.2379; 
     atom->sigma = 3.405; 
@@ -142,6 +142,10 @@ void LJMD::setup()
     // Set the appropirate units, conversions and timestep for our system
     update->set_units("lj");    
     update->nsteps = 10000;
+
+    //Set restart name and read in the restart file
+    input->restfile = (char *) "argon_108.rest";
+    input->read_restart();  
 
     // Setup the pair potential for the force calculation 
     force->create_pair("lj/cut"); 

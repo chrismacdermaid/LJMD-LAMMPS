@@ -60,6 +60,7 @@ namespace LJMD_NS {
 	  modify(ptr->modify),
           domain(ptr->domain),
           output(ptr->output),
+          input(ptr->input),
           screen(ptr->screen),
 	  world(ptr->world) {}
 
@@ -77,6 +78,7 @@ namespace LJMD_NS {
 	  Modify *&modify;
           Domain *&domain;
           Output *&output;
+          Input *&input;
           
           FILE *&screen;
 	  MPI_Comm &world;

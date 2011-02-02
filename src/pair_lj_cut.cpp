@@ -178,14 +178,14 @@ void PairLJCut::compute()
 void PairLJCut::clear_force()
 {  
   
-  double *x = atom->fx;
-  double *y = atom->fy;
-  double *z = atom->fz;
+  double *fx = atom->fx;
+  double *fy = atom->fy;
+  double *fz = atom->fz;
   
   for (int i = 0; i < atom->natoms; i++) {
-    *x++ = 0.0;
-    *y++ = 0.0;
-    *z++ = 0.0;
+    *fx++ = 0.0;
+    *fy++ = 0.0;
+    *fz++ = 0.0;
   }
 }
 
