@@ -41,7 +41,7 @@
 
 using namespace LJMD_NS;
 
-#define ONE "step temp epair ekin etotal"
+#define ONE "step temp ke pe etotal"
 
 enum{ONELINE,MULTILINE};
 enum{INT,FLOAT,BIGINT};
@@ -110,6 +110,7 @@ void Thermo::init()
   // add '/n' every 3 values if lineflag = MULTILINE
   // add trailing '/n' to last value
 
+
   char *ptr;
   for (i = 0; i < nfield; i++) {
     format[i][0] = '\0';
@@ -160,6 +161,9 @@ void Thermo::allocate()
   vfunc = new FnPtr[n];
   vtype = new int[n];
 
+  format = new char*[n];
+  for (int i = 0; i < n; i++) format[i] = new char[32];
+
   field2index = new int[n];
   argindex1 = new int[n];
   argindex2 = new int[n];
@@ -180,7 +184,7 @@ void Thermo::allocate()
 void Thermo::deallocate()
 {
   int n = nfield_initial + 1;
-
+/*
   for (int i = 0; i < n; i++) delete [] keyword[i];
   delete [] keyword;
   delete [] vfunc;
@@ -197,7 +201,7 @@ void Thermo::deallocate()
   delete [] id_compute;
   delete [] compute_which;
   delete [] computes;
-
+*/
 }
 
 void Thermo::parse_fields(char *str)
@@ -258,7 +262,7 @@ void Thermo::header()
   sprintf(&line[loc],"\n");
   
   if (me == 0) {
-    //fprintf(screen,line);
+    fprintf(screen,line);
   }
 }
 
@@ -287,7 +291,7 @@ void Thermo::compute()
   }
 
   if (me == 0) {
-    //fprintf(screen,line);
+    fprintf(screen,line);
   }
 }
 

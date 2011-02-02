@@ -16,6 +16,10 @@ all: $(ALL)
 ljmd : 		$(OBJ)
 		$(CXX) $(OPT) $(OBJ) -o ljmd $(LIB)
 
+ljmd-gdb :	$(OBJ)
+		$(CXX) $(OPT) $(OBJ) $(DBG) -o ljmd $(LIB)
+
+
 %.o : %.cpp
 		$(CXX) $(OPT) -c $<
 clean:

@@ -90,6 +90,13 @@ Output::~Output()
   if (thermo) delete thermo;
 }
 
+void Output::init()
+{
+    /* Initialize thermo class */
+    thermo->init();
+}
+
+
 /* ----------------------------------------------------------------------
    new Thermo style 
 ------------------------------------------------------------------------- */

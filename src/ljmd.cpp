@@ -65,7 +65,11 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   create();  //Create the top level classes
 //  init();    // Initialize the top level classes 
 
+
   setup(); // Setup the LJ system  
+
+
+
 }
 
 LJMD::~LJMD()
@@ -84,6 +88,8 @@ LJMD::~LJMD()
 
 void LJMD::create()
 {
+
+
   domain = new Domain(this);
   atom = new Atom(this);
   force = new Force(this);
@@ -140,14 +146,13 @@ void LJMD::setup()
     // Setup the pair potential for the force calculation 
     force->create_pair("lj/cut"); 
     force->init(); 
-    
 
     // Create fix for nve calculation and integration   
-    char **newarg = new char*[1];
-    newarg[0] = 0;
+    char **newarg = new char*[2];
+    newarg[0] = (char *) "ljmd_nve_fix";;
     newarg[1] = (char *) "all";
     newarg[2] = (char *) "nve";
-    modify->add_fix(0, newarg);
+    modify->add_fix(3, newarg);
 
     // Initialize fix and computes
     modify->init();
@@ -155,5 +160,6 @@ void LJMD::setup()
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
      * and calculate the initial values of ke, pe and temp of our system */
+    output->init();
     output->setup();
 }

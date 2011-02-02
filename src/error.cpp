@@ -56,6 +56,8 @@ void Error::universe_all(const char *str)
     if (universe->uscreen) fprintf(universe->uscreen,"ERROR: %s\n",str);
   }
 
+  if (screen && screen != stdout) fclose(screen);
+  
   MPI_Finalize();
   exit(1);
 }
@@ -82,6 +84,13 @@ void Error::all(const char *str)
 
   int me;
   MPI_Comm_rank(world,&me);
+
+  if (me == 0) {
+    if (screen) fprintf(screen,"ERROR: %s\n",str);
+  }
+
+  if (screen && screen != stdout) fclose(screen);
+
 
   MPI_Finalize();
   exit(1);

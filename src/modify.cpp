@@ -35,6 +35,7 @@ belongs to modify & fix/compute */
 #include "update.h"
 #include "memory.h"
 #include "error.h"
+#include "universe.h"
 
 using namespace LJMD_NS;
 
@@ -210,7 +211,6 @@ void Modify::add_fix(int narg, char **arg)
 
   if (narg < 3) error->all("Illegal fix command");
 
-  
   // Check to see if the fix is already defined...
   int ifix;
   for (ifix = 0; ifix < nfix; ifix++)
@@ -354,7 +354,7 @@ int Modify::find_compute(char *id)
 
 void Modify::list_init(int mask, int &n, int *&list)
 {
-  delete [] list;
+  //delete [] list;
 
   n = 0;
   for (int i = 0; i < nfix; i++) if (fmask[i] & mask) n++;
@@ -371,8 +371,8 @@ void Modify::list_init(int mask, int &n, int *&list)
 
 void Modify::list_init_end_of_step(int mask, int &n, int *&list)
 {
-  delete [] list;
-  delete [] end_of_step_every;
+//  delete [] list;
+//  delete [] end_of_step_every;
 
   n = 0;
   for (int i = 0; i < nfix; i++) if (fmask[i] & mask) n++;
@@ -395,7 +395,7 @@ void Modify::list_init_end_of_step(int mask, int &n, int *&list)
 
 void Modify::list_init_thermo_energy(int mask, int &n, int *&list)
 {
-  delete [] list;
+  //delete [] list;
 
   n = 0;
   for (int i = 0; i < nfix; i++)
@@ -413,7 +413,7 @@ void Modify::list_init_thermo_energy(int mask, int &n, int *&list)
 
 void Modify::list_init_compute()
 {
-  delete [] list_timeflag;
+  //delete [] list_timeflag;
 
   n_timeflag = 0;
   for (int i = 0; i < ncompute; i++)
