@@ -56,6 +56,7 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   memory = new Memory(this);
   error = new Error(this);
   universe = new Universe(this, communicator);
+  input = new Input(this);
 
   world = universe->uworld;
   screen = universe->uscreen;      
@@ -63,10 +64,8 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
   if (universe->me == 0)
     fprintf(universe->uscreen, "LJMD Running on %d procs\n",universe->nprocs);
 
-
   create();  //Create the top level classes
   //init();    // Initialize the top level classes 
-
 
   setup(); // Setup the LJ system  
 
@@ -76,12 +75,13 @@ LJMD::~LJMD()
 {
 
   //Kill top level classes
-  destroy ();
+//  destroy();
   
   // Delete fundamental classes
   delete universe;
   delete error;
   delete memory;
+  delete input;
 }
 
 /* create top level classes */
@@ -94,14 +94,12 @@ void LJMD::create()
   update = new Update(this);
   modify = new Modify(this);
   output = new Output(this);
-  input = new Input(this);
 }
 
 /* delete top level classes */
 
 void LJMD::destroy()
 {
-  delete input;
   delete output;
   delete modify;
   delete update;
@@ -172,9 +170,16 @@ void LJMD::setup()
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
      * and calculate the initial values of ke, pe and temp of our system */
-//    output->init();
-//    output->setup();
+    //output->init();
+    //output->setup();
+
+    //modify->initial_integrate();
+    //force->pair->compute();
+    //modify->final_integrate();
+
+    //output->write();
 
 
-//    atom->aprint();     
+    MPI_Barrier(universe->uworld);
+
 }

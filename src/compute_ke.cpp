@@ -81,7 +81,7 @@ double ComputeKE::compute_scalar()
     ke += vx[i]*vx[i] + vy[i]*vy[i] + vz[i]*vz[i];
   }
 
-  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,universe->uworld);
+  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
   scalar *= pfactor;
   return scalar;
 }

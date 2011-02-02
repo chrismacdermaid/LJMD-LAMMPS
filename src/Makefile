@@ -1,5 +1,5 @@
-CC=mpicc
-CXX=mpicxx
+CC=mpicc 
+CXX=mpicxx -arch i386
 OPT=-ffast-math -fexpensive-optimizations -O3 -funroll-all-loops -msse3
 DBG=-g -pg -O0
 LIB=-lm

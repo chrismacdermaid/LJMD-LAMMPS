@@ -36,6 +36,7 @@
    Contributing author: Paul Crozier (SNL)
 ------------------------------------------------------------------------- */
 
+#include "mpi.h"
 #include "math.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -118,21 +119,18 @@ void PairLJCut::compute()
   double *fy = atom->fy;
   double *fz = atom->fz;
  
-  if (universe->me == 1)
-    atom->aprint();
-
   int natoms = atom->natoms;
 
   // vdw pe
   eng_vdwl = 0.0; 
 
-  // Zero the force array
+  // Zero the force arrays
   clear_force();
 
   // Broadcast atom positions 
-  MPI_Bcast(rx, natoms, MPI_DOUBLE, 0, universe->uworld); 
-  MPI_Bcast(ry, natoms, MPI_DOUBLE, 0, universe->uworld); 
-  MPI_Bcast(rz, natoms, MPI_DOUBLE, 0, universe->uworld); 
+  MPI_Bcast(rx, natoms, MPI_DOUBLE, 0, world); 
+  MPI_Bcast(ry, natoms, MPI_DOUBLE, 0, world); 
+  MPI_Bcast(rz, natoms, MPI_DOUBLE, 0, world); 
 
   /* The main force loop, assign each proc an index to work on
      in the upper triangular part of the force matrix */  
@@ -142,21 +140,23 @@ void PairLJCut::compute()
     int i,j;
     double rx1, ry1, rz1;
 
-
     i = ii + universe->me;
     if (i >= (natoms-1)) break;
-    
+ 
+    //fprintf(screen, "%5d %5d %5d\n", universe->me, ii, i);
+
     rx1 = rx[i];     
     ry1 = ry[i];     
     rz1 = rz[i];     
 
-    for (j = i+1; j < (atom->natoms); j++) {
+    for (j = i+1; j < (atom->natoms); ++j) {
       double drx, dry, drz, rsq;
-      
+     
+      /* Use pbc to get minimum distance between particle i and j */
       drx = domain->pbc(rx1 - rx[j], domain->xby2, domain->x);
       dry = domain->pbc(ry1 - ry[j], domain->yby2, domain->y);
       drz = domain->pbc(rz1 - rz[j], domain->zby2, domain->z);
-    
+      
       rsq = drx*drx + dry*dry + drz*drz;
 
       /* Compute force if within cutoff */
@@ -168,6 +168,7 @@ void PairLJCut::compute()
         r6 = rinv * rinv * rinv;
 
         ffac = (12.0*c12*r6 - 6.0*c6)*r6*rinv;
+        
         eng_vdwl += r6*(c12*r6 - c6);
 
         cx[i] += drx * ffac;
@@ -176,30 +177,29 @@ void PairLJCut::compute()
         cx[j] -= drx * ffac;
         cy[j] -= dry * ffac;
         cz[j] -= drz * ffac;
+
+        if (universe->me == 0)
+        fprintf(screen, "%d %d cx = %10.4lf  cy = %10.4lf  cz = %10.4lf\n\
+            drx = %10.4lf dry = %10.4lf drz = %10.4lf ffac =  %10.4lf\
+            rcsq = %10.4lf\n", i, j, cx[i], cy[i], cz[i], drx, dry, drz, ffac, rcsq);
+        fflush(screen);
       }
     }
   }
 
-  /* Sum partial forces */ 
-  MPI_Reduce(cx, fx, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
-  MPI_Reduce(cy, fy, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
-  MPI_Reduce(cz, fz, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
-  
-  /* Sum potential - This is done in the compute_pe section */
-  //MPI_Reduce(&epot, &eng_vdw, natoms, MPI_DOUBLE, MPI_SUM, 0, universe->uworld); 
+  /* Sum partial forces to process with rank 0 */ 
+  MPI_Reduce(cx, fx, natoms, MPI_DOUBLE, MPI_SUM, 0, world); 
+  MPI_Reduce(cy, fy, natoms, MPI_DOUBLE, MPI_SUM, 0, world); 
+  MPI_Reduce(cz, fz, natoms, MPI_DOUBLE, MPI_SUM, 0, world); 
+ 
 }
 
 void PairLJCut::clear_force()
 {  
-  
-  double *fx = atom->fx;
-  double *fy = atom->fy;
-  double *fz = atom->fz;
-  
   for (int i = 0; i < atom->natoms; i++) {
-    *fx++ = 0.0;
-    *fy++ = 0.0;
-    *fz++ = 0.0;
+    *cx++ = 0.0;
+    *cy++ = 0.0;
+    *cz++ = 0.0;
   }
 }
 

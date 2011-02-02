@@ -105,8 +105,6 @@ void Output::create_thermo(int narg, char **arg)
 {
   if (narg < 1) error->all("Illegal thermo_style command");
 
-  // set thermo = NULL in case new Thermo throws an error
-
   delete thermo;
   thermo = NULL;
   thermo = new Thermo(ljmd,narg,arg);

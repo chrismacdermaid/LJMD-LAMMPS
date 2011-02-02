@@ -95,6 +95,9 @@ void FixNVE::initial_integrate()
     vy[i] += dtmf * fy[i];
     vz[i] += dtmf * fz[i];
 
+    //fprintf(screen, "%15.6f %15.6f %15.6f\n", vx[i], vy[i], vz[i]); 
+    //fprintf(screen, "%15.6f %15.6f %15.6f\n", fx[i], fy[i], fz[i]); 
+
     rx[i] += update->dt * vx[i]; 
     ry[i] += update->dt * vy[i]; 
     rz[i] += update->dt * vz[i]; 

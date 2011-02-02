@@ -57,7 +57,7 @@ Atom::~Atom()
   
   delete [] fx; 
   delete [] fy; 
- // delete [] fz; 
+  delete [] fz; 
 
 }
 
