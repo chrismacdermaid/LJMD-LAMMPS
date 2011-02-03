@@ -122,8 +122,6 @@ void LJMD::init()
 void LJMD::setup()
 {
 
-  fprintf(screen,"MY ID: %d\n", universe->me);
-
     /* Setup an LJMD run. This is temporary until an input parser is written
      * the general idea is to set all the necesary params, units, fixes etc 
      * and then initialize the classes */
@@ -151,7 +149,6 @@ void LJMD::setup()
     // Setup the pair potential for the force calculation 
     force->create_pair("lj/cut"); 
     force->init(); 
-    
 
     // Create fix for nve calculation and integration   
     char **newarg = new char*[2];
@@ -163,22 +160,26 @@ void LJMD::setup()
     // Initialize fix and computes
     modify->init();
 
-
-    // Compute initial forces on atoms
-    force->pair->compute();
-    
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
      * and calculate the initial values of ke, pe and temp of our system */
-    //output->init();
-    //output->setup();
+    output->init();
+    output->setup();
 
-    //modify->initial_integrate();
-    //force->pair->compute();
-    //modify->final_integrate();
+    // The verlet/force loop    
+        
+        for (int i = 0; i < 100; i++) {
 
-    //output->write();
+        if (modify->n_initial_integrate)
+                modify->initial_integrate();
+        
+        force->pair->compute();
+      
+        if (modify->n_final_integrate)
+                modify->final_integrate();
 
+        output->write();
+    }
 
     MPI_Barrier(universe->uworld);
 

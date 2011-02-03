@@ -184,7 +184,6 @@ void Thermo::allocate()
 void Thermo::deallocate()
 {
   int n = nfield_initial + 1;
-/*
   for (int i = 0; i < n; i++) delete [] keyword[i];
   delete [] keyword;
   delete [] vfunc;
@@ -201,7 +200,6 @@ void Thermo::deallocate()
   delete [] id_compute;
   delete [] compute_which;
   delete [] computes;
-*/
 }
 
 void Thermo::parse_fields(char *str)

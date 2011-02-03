@@ -115,12 +115,12 @@ void Modify::init()
 
   // Make list of specific fix functions to call during timestepping using bit mask
   list_init(INITIAL_INTEGRATE,n_initial_integrate,list_initial_integrate);
-  list_init(POST_INTEGRATE,n_post_integrate,list_post_integrate);
+//  list_init(POST_INTEGRATE,n_post_integrate,list_post_integrate);
   list_init(FINAL_INTEGRATE,n_final_integrate,list_final_integrate);
-  list_init(PRE_FORCE,n_pre_force,list_pre_force);
-  list_init(POST_FORCE,n_post_force,list_post_force);
-  list_init_end_of_step(END_OF_STEP,n_end_of_step,list_end_of_step);
-  list_init_thermo_energy(THERMO_ENERGY,n_thermo_energy,list_thermo_energy);
+//  list_init(PRE_FORCE,n_pre_force,list_pre_force);
+//  list_init(POST_FORCE,n_post_force,list_post_force);
+//  list_init_end_of_step(END_OF_STEP,n_end_of_step,list_end_of_step);
+//  list_init_thermo_energy(THERMO_ENERGY,n_thermo_energy,list_thermo_energy);
 
   // Initilize all the fixes
   for (i = 0; i < nfix; i++) fix[i]->init();
@@ -138,8 +138,8 @@ void Modify::init()
 
 void Modify::initial_integrate()
 {
-  for (int i = 0; i < n_initial_integrate; i++)
-    fix[list_initial_integrate[i]]->initial_integrate();
+    for (int i = 0; i < n_initial_integrate; i++)
+     fix[list_initial_integrate[i]]->initial_integrate();
 }
 
 /* ----------------------------------------------------------------------

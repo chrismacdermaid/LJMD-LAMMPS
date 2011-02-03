@@ -68,7 +68,7 @@ void ComputeTemp::init()
 {
   dof = 3.0*atom->natoms-3.0;
 
-  tfactor = force->mvsq2e * atom -> mass / (3.0*atom->natoms-3.0) / force->kboltz;
+  tfactor = force->mvsq2e * atom -> mass / dof / force->kboltz;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -77,24 +77,21 @@ void ComputeTemp::init()
 
 double ComputeTemp::compute_scalar()
 {
-  double *vx = atom->vx;
-  double *vy = atom->vy;
-  double *vz = atom->vz;
   double t = 0.0;
 
-  /* Do we need to broadcast the velocities here? */
+  /*
+        MPI_Bcast(atom->vx, atom->natoms, MPI_DOUBLE,0,world);
+        MPI_Bcast(atom->vy, atom->natoms, MPI_DOUBLE,0,world);
+        MPI_Bcast(atom->vz, atom->natoms, MPI_DOUBLE,0,world);
+*/
 
-  for (int ii = 0; ii < atom->natoms; ii += universe->nprocs) {
-    int i;
-
-    i = ii + universe->me;
-
-    if (i > atom->natoms) break;
-
-    t += vx[i]*vx[i] + vy[i]*vy[i] + vz[i]*vz[i];
+  for (int i = 0; i < atom->natoms; i++) {
+     t += atom->vx[i]*atom->vx[i]
+      + atom->vy[i]*atom->vy[i]
+      + atom->vz[i]*atom->vz[i];
   }
 
-  MPI_Allreduce(&t,&scalar,1,MPI_DOUBLE,MPI_SUM,universe->uworld);
+  MPI_Allreduce(&t,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
 
   scalar *= tfactor;
   return scalar;

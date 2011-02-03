@@ -62,26 +62,15 @@ void ComputeKE::init()
 
 double ComputeKE::compute_scalar()
 {
-  double *vx = atom->vx;
-  double *vy = atom->vy;
-  double *vz = atom->vz;
-
   double ke = 0.0;
   
-  /* Do we need to broadcast the velocities here? */
-
-  for (int ii = 0; ii < atom->natoms; ii += universe->nprocs) {
-    
-    int i;
-    
-    i = ii + universe->me;
-
-    if (i > atom->natoms) break;
-
-    ke += vx[i]*vx[i] + vy[i]*vy[i] + vz[i]*vz[i];
-  }
-
+  for (int i = 0; i < atom->natoms; i++)
+    ke += atom->vx[i]*atom->vx[i] 
+      + atom->vy[i]*atom->vy[i] 
+      + atom->vz[i]*atom->vz[i];
+  
   MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
+
   scalar *= pfactor;
   return scalar;
 }
