@@ -81,9 +81,10 @@ class Thermo : protected Pointers {
                          // index = where they are in computes list
                          // id = ID of Compute objects
                          // Compute * = ptrs to the Compute objects
-  int index_temp,index_pe;
-  char *id_temp,*id_pe;
-  class Compute *temperature,*pe;
+
+  int index_temp,index_pe,index_ke;
+  char *id_temp,*id_pe,*id_ke;
+  class Compute *temperature,*pe,*ke;
 
   int ncompute;                // # of Compute objects called by thermo
   char **id_compute;           // their IDs

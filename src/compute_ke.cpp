@@ -69,8 +69,6 @@ double ComputeKE::compute_scalar()
       + atom->vy[i]*atom->vy[i] 
       + atom->vz[i]*atom->vz[i];
   
-  MPI_Allreduce(&ke,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
-
-  scalar *= pfactor;
+  scalar = ke * pfactor;
   return scalar;
 }

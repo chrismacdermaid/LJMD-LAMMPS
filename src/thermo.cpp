@@ -68,9 +68,11 @@ Thermo::Thermo(LJMD *ljmd, int narg, char **arg) : Pointers(ljmd)
   line = new char[MAXLINE];
   strcpy(line,ONE);
 
+  // These names are set in output constructor
   id_temp = (char *) "thermo_temp";
   id_pe = (char *) "thermo_pe";
- 
+  id_ke = (char *) "thermo_ke";      
+
   /* How many fields to output */
   nfield_initial = atom->count_words(line);
   
@@ -142,6 +144,7 @@ void Thermo::init()
   // set ptrs to keyword-specific Compute objects
 
   if (index_temp >= 0) temperature = computes[index_temp];
+  if (index_ke >= 0) ke = computes[index_ke];
   if (index_pe >= 0) pe = computes[index_pe];
 }
 
@@ -220,7 +223,7 @@ void Thermo::parse_fields(char *str)
     
     } else if (strcmp(word,"ke") == 0) {
       addfield("KinEng",&Thermo::compute_ke,FLOAT);
-      index_temp = add_compute(id_temp,SCALAR);
+      index_ke = add_compute(id_ke,SCALAR);
 
     } else if (strcmp(word,"pe") == 0) {
       addfield("PotEng",&Thermo::compute_pe,FLOAT);
@@ -228,7 +231,7 @@ void Thermo::parse_fields(char *str)
     
     } else if (strcmp(word,"etotal") == 0) {
       addfield("TotEng",&Thermo::compute_etotal,FLOAT);
-      index_temp = add_compute(id_temp,SCALAR);
+      index_ke = add_compute(id_ke,SCALAR);
       index_pe = add_compute(id_pe,SCALAR);
     
     } else error->all("Invalid keyword in thermo_style custom command");
@@ -332,14 +335,14 @@ void Thermo::compute_pe()
 
 void Thermo::compute_ke()
 {
-  dvalue = temperature->scalar;
-  dvalue *= 0.5 * temperature->dof * force->kboltz;
- }
+
+  dvalue = ke->scalar;
+
+}
 
 void Thermo::compute_etotal()
 {
   compute_pe();
-  double ke = temperature->scalar;
-  ke *= 0.5 * temperature->dof * force->kboltz;
-  dvalue += ke;
+  double ke_temp = ke->scalar;
+  dvalue += ke_temp;
 }

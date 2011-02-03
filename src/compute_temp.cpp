@@ -89,11 +89,12 @@ double ComputeTemp::compute_scalar()
      t += atom->vx[i]*atom->vx[i]
       + atom->vy[i]*atom->vy[i]
       + atom->vz[i]*atom->vz[i];
+  
   }
 
-  MPI_Allreduce(&t,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
+//  MPI_Allreduce(&t,&scalar,1,MPI_DOUBLE,MPI_SUM,world);
 
-  scalar *= tfactor;
+  scalar = t * tfactor;
   return scalar;
 }
 

@@ -73,7 +73,12 @@ Output::Output(LJMD *ljmd) : Pointers(ljmd)
   newarg[1] = (char *) "all";
   newarg[2] = (char *) "pe";
   modify->add_compute(3,newarg);
- 
+
+  newarg[0] = (char *) "thermo_ke";
+  newarg[1] = (char *) "all";
+  newarg[2] = (char *) "ke";
+  modify->add_compute(3,newarg);
+
   delete [] newarg;
 
   // create default Thermo class

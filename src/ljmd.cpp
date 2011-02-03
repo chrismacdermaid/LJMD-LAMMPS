@@ -166,9 +166,12 @@ void LJMD::setup()
     output->init();
     output->setup();
 
+    // How many steps?
+    update->nsteps = 1000;     
+
     // The verlet/force loop    
         
-        for (int i = 0; i < 100; i++) {
+        for (update->ntimestep = 0; update->ntimestep < update->nsteps; (update->ntimestep)++) {
 
         if (modify->n_initial_integrate)
                 modify->initial_integrate();
