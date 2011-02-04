@@ -31,37 +31,74 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-#ifndef LJMD_OUTPUT_H
-#define LJMD_OUTPUT_H
-
-#include "pointers.h"
+#include "mpi.h"
+#include "stdlib.h"
+#include "string.h"
+#include "stdio.h"
+#include "dump.h"
 #include "lmptype.h"
+#include "atom.h"
+#include "update.h"
+#include "domain.h"
+#include "output.h"
+#include "memory.h"
+#include "error.h"
 
-namespace LJMD_NS {
+using namespace LJMD_NS;
 
-class Output : protected Pointers {
- public:
+// allocate space for static class variable
 
-    class Thermo *thermo;        // Thermodynamic computations
+//Dump *Dump::dumpptr;
 
-    int ndump;                   // # of Dumps defined
-    int max_dump;                // max size of Dump list
-    class Dump **dump;           // list of defined Dumps
+/* ---------------------------------------------------------------------- */
 
+Dump::Dump(LJMD *ljmd, int narg, char **arg) : Pointers(ljmd)
+{
+  MPI_Comm_rank(world,&me);
+  MPI_Comm_size(world,&nprocs);
 
-    Output(class LJMD *);
-    ~Output();
+  int n = strlen(arg[0]) + 1;
+  id = new char[n];
+  strcpy(id,arg[0]);
 
-    void init();
-    void setup();                      // initial output before run/min
-    void create_thermo(int, char **);  // create a thermo style
-    void write();                      // output for current timestep
+  n = strlen(arg[2]) + 1;
+  style = new char[n];
+  strcpy(style,arg[2]);
 
+  n = strlen(arg[4]) + 1;
+  filename = new char[n];
+  strcpy(filename,arg[4]);
 
-    void add_dump(int, char **);       // add a Dump to Dump list
-    void delete_dump(char *);          // delete a Dump from Dump list
-
-  };
 }
 
-#endif
+/* ---------------------------------------------------------------------- */
+
+Dump::~Dump()
+{
+  delete [] id;
+  delete [] style;
+  delete [] filename;
+
+  if (me == 0) fclose(fp);
+}
+
+void Dump::init()
+{
+  init_style();
+}
+
+void Dump::write()
+{
+  write_header();
+  write_data();
+}
+
+void Dump::openfile()
+{
+      if (me == 0) { 
+      fp = fopen(filename,"w");
+      
+      if (fp == NULL) error->one("Cannot open dump file");
+
+      }
+}

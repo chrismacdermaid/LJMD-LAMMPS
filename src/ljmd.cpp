@@ -127,19 +127,19 @@ void LJMD::setup()
      * and then initialize the classes */
 
     // Set up bounding box and initialize it
-    domain->x = domain->y = domain->z = 17.1580;
+    domain->x = domain->y = domain->z = 51.4740;
     domain->init();
 
     /* Specify number of atoms in the system, allocate memory
        for the positions, velocities, and forces, specify atom properties */
-    atom->natoms = 108;
+    atom->natoms = 2916;
     atom->mass = 39.948; 
     atom->epsilon = 0.2379; 
     atom->sigma = 3.405; 
     atom->init();
 
     //Set restart name and read in the restart file
-    input->restfile = (char *) "argon_108.rest";
+    input->restfile = (char *) "argon_2916.rest";
     input->read_restart();  
 
     // Set the appropirate units, conversions and timestep for our system
@@ -152,13 +152,24 @@ void LJMD::setup()
 
     // Create fix for nve calculation and integration   
     char **newarg = new char*[2];
-    newarg[0] = (char *) "ljmd_nve_fix";;
+    newarg[0] = (char *) "ljmd_nve_fix";
     newarg[1] = (char *) "all";
     newarg[2] = (char *) "nve";
     modify->add_fix(3, newarg);
+    delete [] newarg;    
 
     // Initialize fix and computes
     modify->init();
+
+    // Create dump style for xyz output
+    newarg = new char*[4];
+    newarg[0] = (char *) "ljmd_xyz_dump";;
+    newarg[1] = (char *) "all";
+    newarg[2] = (char *) "xyz";
+    newarg[3] = (char *) "1";
+    newarg[4] = (char *) "argon_2916.xyz";
+    output->add_dump(5, newarg);
+    delete [] newarg;    
 
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
@@ -167,7 +178,7 @@ void LJMD::setup()
     output->setup();
 
     // How many steps?
-    update->nsteps = 1000;     
+    update->nsteps = 100;     
 
     // The verlet/force loop    
         

@@ -31,37 +31,33 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-#ifndef LJMD_OUTPUT_H
-#define LJMD_OUTPUT_H
+#ifdef DUMP_CLASS
 
-#include "pointers.h"
-#include "lmptype.h"
+DumpStyle(xyz,DumpXYZ)
+
+#else
+
+#ifndef LJMD_DUMP_XYZ_H
+#define LJMD_DUMP_XYZ_H
+
+#include "dump.h"
 
 namespace LJMD_NS {
 
-class Output : protected Pointers {
+class DumpXYZ : public Dump {
  public:
+  
+   DumpXYZ(class LJMD *, int, char**);
+  ~DumpXYZ() {}
+	
+ private:
+  void init_style();
+  void write_header();
+  void write_data();
+};
 
-    class Thermo *thermo;        // Thermodynamic computations
-
-    int ndump;                   // # of Dumps defined
-    int max_dump;                // max size of Dump list
-    class Dump **dump;           // list of defined Dumps
-
-
-    Output(class LJMD *);
-    ~Output();
-
-    void init();
-    void setup();                      // initial output before run/min
-    void create_thermo(int, char **);  // create a thermo style
-    void write();                      // output for current timestep
-
-
-    void add_dump(int, char **);       // add a Dump to Dump list
-    void delete_dump(char *);          // delete a Dump from Dump list
-
-  };
 }
 
 #endif
+#endif
+

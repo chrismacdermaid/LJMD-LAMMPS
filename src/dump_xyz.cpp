@@ -31,37 +31,57 @@
    See the README file in the top-level LAMMPS directory.
 ------------------------------------------------------------------------- */
 
-#ifndef LJMD_OUTPUT_H
-#define LJMD_OUTPUT_H
+#include "string.h"
+#include "dump_xyz.h"
+#include "atom.h"
+#include "error.h"
+#include "memory.h"
+#include "update.h"
 
-#include "pointers.h"
-#include "lmptype.h"
+using namespace LJMD_NS;
 
-namespace LJMD_NS {
+/* ---------------------------------------------------------------------- */
 
-class Output : protected Pointers {
- public:
-
-    class Thermo *thermo;        // Thermodynamic computations
-
-    int ndump;                   // # of Dumps defined
-    int max_dump;                // max size of Dump list
-    class Dump **dump;           // list of defined Dumps
-
-
-    Output(class LJMD *);
-    ~Output();
-
-    void init();
-    void setup();                      // initial output before run/min
-    void create_thermo(int, char **);  // create a thermo style
-    void write();                      // output for current timestep
-
-
-    void add_dump(int, char **);       // add a Dump to Dump list
-    void delete_dump(char *);          // delete a Dump from Dump list
-
-  };
+DumpXYZ::DumpXYZ(LJMD *ljmd, int narg, char **arg) : Dump(ljmd, narg, arg)
+{
+  if (narg != 5) error->all("Illegal dump xyz command");
+  
+  char *str = (char *) "Ar  %20.8f %20.8f %20.8f";
+  int n = strlen(str) + 1;
+  format_default = new char[n];
+  strcpy(format_default,str);
 }
 
-#endif
+/* ---------------------------------------------------------------------- */
+
+void DumpXYZ::init_style()
+{
+  delete [] format;
+  char *str;
+  str = format_default;
+
+  int n = strlen(str) + 2;
+  format = new char[n];
+  strcpy(format,str);
+  strcat(format,"\n");
+
+  openfile();
+}
+
+/* ---------------------------------------------------------------------- */
+
+void DumpXYZ::write_header()
+{
+  if (me == 0)
+    fprintf(fp,BIGINT_FORMAT "\n nfi=%d\n", atom->natoms, update->ntimestep);
+}
+
+/* ---------------------------------------------------------------------- */
+
+void DumpXYZ::write_data()
+{
+  if (me == 0) 
+  for (int i = 0; i < atom->natoms; i++) {
+    fprintf(fp,format, atom->rx[i], atom->ry[i], atom->rz[i]);
+  }
+}
