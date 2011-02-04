@@ -48,6 +48,7 @@ class Output : protected Pointers {
     int max_dump;                // max size of Dump list
     class Dump **dump;           // list of defined Dumps
 
+    int nprint;                  // How often to generate output and dump
 
     Output(class LJMD *);
     ~Output();

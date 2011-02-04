@@ -69,6 +69,14 @@ LJMD::LJMD(int narg, char **arg, MPI_Comm communicator)
 
   setup(); // Setup the LJ system  
 
+  // How many steps?
+  update->nsteps = 10000;    
+
+  // How often to write out coordinates and thermo
+  output->nprint = 100;      
+
+  run(); // run
+
 }
 
 LJMD::~LJMD()
@@ -127,19 +135,19 @@ void LJMD::setup()
      * and then initialize the classes */
 
     // Set up bounding box and initialize it
-    domain->x = domain->y = domain->z = 51.4740;
+    domain->x = domain->y = domain->z = 17.1580;
     domain->init();
 
     /* Specify number of atoms in the system, allocate memory
        for the positions, velocities, and forces, specify atom properties */
-    atom->natoms = 2916;
+    atom->natoms = 108;
     atom->mass = 39.948; 
     atom->epsilon = 0.2379; 
     atom->sigma = 3.405; 
     atom->init();
 
     //Set restart name and read in the restart file
-    input->restfile = (char *) "argon_2916.rest";
+    input->restfile = (char *) "argon_108.rest";
     input->read_restart();  
 
     // Set the appropirate units, conversions and timestep for our system
@@ -167,9 +175,12 @@ void LJMD::setup()
     newarg[1] = (char *) "all";
     newarg[2] = (char *) "xyz";
     newarg[3] = (char *) "1";
-    newarg[4] = (char *) "argon_2916.xyz";
+    newarg[4] = (char *) "argon_108.xyz";
     output->add_dump(5, newarg);
     delete [] newarg;    
+
+    // Calculate the initial pe of the system
+    force->pair->compute(); 
 
     /* The output defaults and thermo/computes are set in the 
      * output constructor, here we setup the output to screen
@@ -177,12 +188,13 @@ void LJMD::setup()
     output->init();
     output->setup();
 
-    // How many steps?
-    update->nsteps = 100;     
+}
 
+void LJMD::run()
+{
     // The verlet/force loop    
         
-        for (update->ntimestep = 0; update->ntimestep < update->nsteps; (update->ntimestep)++) {
+     for (update->ntimestep = 0; update->ntimestep < update->nsteps; (update->ntimestep)++) {
 
         if (modify->n_initial_integrate)
                 modify->initial_integrate();
@@ -192,9 +204,9 @@ void LJMD::setup()
         if (modify->n_final_integrate)
                 modify->final_integrate();
 
-        output->write();
+        if ((update->ntimestep % output->nprint) == 0)
+                output->write();
     }
 
-    MPI_Barrier(universe->uworld);
-
+    MPI_Barrier(world);
 }
